@@ -19,8 +19,8 @@ modification of this file, via any medium, is strictly prohibited.
       --teal-glow: #14b8a6;
       --red-alert: #ef4444;
       --emerald-ok: #10b981;
-      --glass-panel: rgba(6, 13, 28, 0.78);
-      --border-tech: rgba(34, 211, 238, 0.28);
+      --glass-panel: rgba(6, 13, 28, 0.82);
+      --border-tech: rgba(34, 211, 238, 0.32);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
@@ -31,7 +31,6 @@ modification of this file, via any medium, is strictly prohibited.
       color: #f8fafc;
     }
 
-    /* 3D CANVAS */
     #dc-canvas {
       position: fixed; inset: 0; width: 100vw; height: 100vh;
       z-index: 1; display: block;
@@ -42,23 +41,21 @@ modification of this file, via any medium, is strictly prohibited.
       position: fixed; inset: 0; z-index: 9999;
       display: flex; flex-direction: column;
       pointer-events: auto;
-      transition: opacity 0.6s ease;
     }
     #airlock-overlay.unlocked { pointer-events: none; }
 
     /* Top Steel Sliding Rail Beam */
     .door-rail-beam {
-      position: relative; z-index: 20; height: 54px; width: 100%;
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 65%, #020617 100%);
+      position: relative; z-index: 20; height: 50px; width: 100%;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 70%, #020617 100%);
       border-bottom: 2px solid #334155;
       box-shadow: 0 10px 30px rgba(0,0,0,0.85);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 28px;
     }
     .rail-track {
-      position: absolute; bottom: 8px; left: 2%; right: 2%; height: 4px;
+      position: absolute; bottom: 7px; left: 2%; right: 2%; height: 3px;
       background: repeating-linear-gradient(90deg, #475569 0 18px, #1e293b 18px 24px);
-      border-radius: 2px;
     }
     .rail-status {
       font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 2px;
@@ -68,7 +65,7 @@ modification of this file, via any medium, is strictly prohibited.
       width: 10px; height: 10px; border-radius: 50%;
       background: var(--red-alert);
       box-shadow: 0 0 12px var(--red-alert);
-      transition: all 0.4s ease;
+      transition: all 0.35s ease;
     }
     .mag-led.green {
       background: var(--emerald-ok);
@@ -82,87 +79,95 @@ modification of this file, via any medium, is strictly prohibited.
 
     .door-leaf {
       position: relative; width: 50%; height: 100%;
-      /* Semi-frosted tempered security glass revealing live 3D DC behind */
-      background: linear-gradient(135deg, rgba(8, 18, 38, 0.72) 0%, rgba(4, 10, 24, 0.64) 100%);
+      background: linear-gradient(135deg, rgba(7, 16, 34, 0.76) 0%, rgba(3, 9, 22, 0.68) 100%);
       backdrop-filter: blur(11px);
       -webkit-backdrop-filter: blur(11px);
-      border-top: 10px solid #1e293b;
-      border-bottom: 14px solid #0f172a;
+      border-top: 8px solid #1e293b;
+      border-bottom: 12px solid #0f172a;
       transition: transform 1.55s cubic-bezier(0.22, 1, 0.36, 1);
       overflow: hidden;
     }
 
     .door-leaf.left {
-      border-left: 16px solid #1e293b;
-      border-right: 4px solid #020617;
-      box-shadow: inset -12px 0 28px rgba(0, 0, 0, 0.65);
+      border-left: 14px solid #1e293b;
+      border-right: 2px solid #020617;
+      box-shadow: inset -10px 0 24px rgba(0, 0, 0, 0.65);
     }
     .door-leaf.right {
-      border-right: 16px solid #1e293b;
-      border-left: 4px solid #020617;
-      box-shadow: inset 12px 0 28px rgba(0, 0, 0, 0.65);
+      border-right: 14px solid #1e293b;
+      border-left: 2px solid #020617;
+      box-shadow: inset 10px 0 24px rgba(0, 0, 0, 0.65);
     }
 
-    /* Slide Apart Animation */
     #airlock-overlay.open .door-leaf.left { transform: translateX(-100%); }
     #airlock-overlay.open .door-leaf.right { transform: translateX(100%); }
 
-    /* Industrial Brushed Steel Vertical Handles */
+    /* Vertical Brushed Steel Handles */
     .door-handle {
-      position: absolute; top: 38%; height: 24%; width: 12px;
-      background: linear-gradient(90deg, #475569, #cbd5e1, #334155);
+      position: absolute; top: 38%; height: 24%; width: 11px;
+      background: linear-gradient(90deg, #475569, #e2e8f0, #334155);
       border-radius: 4px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+      box-shadow: 0 0 16px rgba(0,0,0,0.85);
     }
-    .door-leaf.left .door-handle { right: 26px; }
-    .door-leaf.right .door-handle { left: 26px; }
+    .door-leaf.left .door-handle { right: 24px; }
+    .door-leaf.right .door-handle { left: 24px; }
 
-    /* Etched Security Grid Lines on Glass */
     .glass-grid {
       position: absolute; inset: 0;
       background-image:
-        linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(34, 211, 238, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.045) 1px, transparent 1px);
       background-size: 48px 48px;
       pointer-events: none;
     }
 
     .leaf-tag {
-      position: absolute; top: 18px; font-family: 'Consolas', monospace;
+      position: absolute; top: 16px; font-family: 'Consolas', monospace;
       font-size: 11px; letter-spacing: 2px; color: rgba(148, 163, 184, 0.65);
     }
     .door-leaf.left .leaf-tag { left: 22px; }
     .door-leaf.right .leaf-tag { right: 22px; }
 
-    /* Split HU Logo Positioned Across Center Seam */
+    /* EXACT CENTERED SPLIT LOGO (460px wide -> 230px left, 230px right) */
     .split-logo-half {
-      position: absolute; top: 11%; width: 460px; height: 290px;
+      position: absolute;
+      top: calc(50% - 265px);
+      width: 460px;
+      height: 250px;
       pointer-events: none;
-      filter: drop-shadow(0 0 24px rgba(34, 211, 238, 0.4));
+      filter: drop-shadow(0 0 22px rgba(34, 211, 238, 0.38));
     }
     .door-leaf.left .split-logo-half { right: -230px; }
     .door-leaf.right .split-logo-half { left: -230px; }
 
-    /* Central Operator Access Console */
+    /* Central Operator Access Terminal Directly Below Split Logo */
     #auth-console {
-      position: absolute; left: 50%; bottom: 9%; transform: translateX(-50%);
-      z-index: 30; width: 390px; max-width: 92vw;
-      background: rgba(5, 12, 26, 0.88);
+      position: absolute;
+      left: 50%;
+      top: calc(50% + 5px);
+      transform: translateX(-50%);
+      z-index: 30;
+      width: 380px;
+      max-width: 90vw;
+      background: rgba(5, 12, 26, 0.90);
       border: 1px solid rgba(34, 211, 238, 0.45);
-      border-radius: 12px; padding: 20px 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(34, 211, 238, 0.14);
+      border-radius: 12px;
+      padding: 18px 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 32px rgba(34, 211, 238, 0.16);
       backdrop-filter: blur(16px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
     #airlock-overlay.open #auth-console {
-      opacity: 0; transform: translate(-50%, 24px); pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, 18px);
+      pointer-events: none;
     }
 
     .auth-header {
       display: flex; justify-content: space-between; align-items: center;
       font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 1.5px;
-      color: var(--cyan-neon); margin-bottom: 14px;
-      border-bottom: 1px solid rgba(34, 211, 238, 0.2); padding-bottom: 8px;
+      color: var(--cyan-neon); margin-bottom: 12px;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.22); padding-bottom: 8px;
     }
     .auth-field { margin-bottom: 10px; }
     .auth-field label {
@@ -170,7 +175,7 @@ modification of this file, via any medium, is strictly prohibited.
       color: #94a3b8; margin-bottom: 4px; text-transform: uppercase;
     }
     .auth-field input {
-      width: 100%; background: rgba(15, 23, 42, 0.9);
+      width: 100%; background: rgba(15, 23, 42, 0.92);
       border: 1px solid #334155; border-radius: 6px;
       padding: 9px 12px; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 13px;
       outline: none;
@@ -178,20 +183,20 @@ modification of this file, via any medium, is strictly prohibited.
     .auth-field input:focus { border-color: var(--cyan-neon); }
 
     #btn-unlock {
-      width: 100%; margin-top: 8px; padding: 12px;
+      width: 100%; margin-top: 6px; padding: 12px;
       background: linear-gradient(90deg, #0284c7, #0d9488);
       border: 1px solid #38bdf8; border-radius: 7px;
       color: #ffffff; font-weight: 700; font-size: 12px; letter-spacing: 1.8px;
       cursor: pointer; text-transform: uppercase;
-      box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.45);
       transition: all 0.25s ease;
     }
     #btn-unlock:hover {
       filter: brightness(1.15);
-      box-shadow: 0 0 28px rgba(34, 211, 238, 0.65);
+      box-shadow: 0 0 28px rgba(34, 211, 238, 0.7);
     }
 
-    /* ================= NOC TELEMETRY HUD (INSIDE COLD AISLE) ================= */
+    /* ================= NOC TELEMETRY HUD ================= */
     #noc-hud {
       position: fixed; inset: 0; z-index: 50; pointer-events: none;
       opacity: 0; transition: opacity 0.8s ease 0.6s;
@@ -251,21 +256,20 @@ modification of this file, via any medium, is strictly prohibited.
 
     .copyright-foot {
       text-align: center; font-size: 10px; letter-spacing: 1.2px;
-      color: rgba(148, 163, 184, 0.6); padding-bottom: 4px;
+      color: rgba(148, 163, 184, 0.65); padding-bottom: 4px;
     }
   </style>
 </head>
 <body>
 
-  <!-- LIVE 3D DATA CENTER COLD-AISLE CANVAS -->
   <canvas id="dc-canvas"></canvas>
 
-  <!-- INDUSTRIAL AIRLOCK SECURITY DOOR WITH SPLIT HU LOGO -->
+  <!-- INDUSTRIAL AIRLOCK SECURITY DOOR -->
   <div id="airlock-overlay">
     <div class="door-rail-beam">
       <div class="rail-status">
         <span class="mag-led" id="mag-led-left"></span>
-        <span id="lock-status-text">AIRLOCK MANTAP // MAG-LOCK: ENGAGED</span>
+        <span id="lock-status-text">AIRLOCK MANTRAP // MAG-LOCK: ENGAGED</span>
       </div>
       <div class="rail-status">
         <span>ZONE: ANK-DC01-COLD-AISLE-B</span>
@@ -275,51 +279,59 @@ modification of this file, via any medium, is strictly prohibited.
     </div>
 
     <div class="door-leaves-wrapper">
-      <!-- LEFT DOOR LEAF (H HALF) -->
+      <!-- LEFT DOOR LEAF (EXACT H HALF -> x <= 230) -->
       <div class="door-leaf left">
         <div class="glass-grid"></div>
         <div class="leaf-tag">GATE LEAF // L-01 [TEMPERED]</div>
         <div class="door-handle"></div>
-        <svg class="split-logo-half" viewBox="0 0 460 290">
+        <svg class="split-logo-half" viewBox="0 0 460 250">
           <defs>
             <linearGradient id="huGradL" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#38bdf8"/>
-              <stop offset="50%" stop-color="#22d3ee"/>
-              <stop offset="100%" stop-color="#2dd4bf"/>
+              <stop offset="100%" stop-color="#22d3ee"/>
             </linearGradient>
           </defs>
-          <!-- Left Arc & H Pillar -->
-          <path d="M195 30 A95 95 0 0 0 115 110 L175 110 L175 130 L115 130 A95 95 0 0 0 195 210 L195 145 L222 145 L222 210 L222 30 L195 30 Z"
-                fill="none" stroke="url(#huGradL)" stroke-width="5"/>
-          <path d="M202 25 L228 50 L228 25 Z" fill="url(#huGradL)"/>
-          <path d="M202 215 L228 190 L228 215 Z" fill="url(#huGradL)"/>
-          <circle cx="145" cy="95" r="4" fill="#22d3ee"/>
-          <circle cx="145" cy="145" r="4" fill="#22d3ee"/>
-          <text x="228" y="255" text-anchor="end" fill="#e2e8f0" font-family="Segoe UI, sans-serif" font-weight="800" font-size="34" letter-spacing="6">HUM</text>
-          <text x="228" y="278" text-anchor="end" fill="#22d3ee" font-family="Consolas, monospace" font-size="12" letter-spacing="2.5">AIOps &amp; CRITI</text>
+          <!-- Outer Left Circuit Ring -->
+          <path d="M226 18 A78 78 0 0 0 152 96 A78 78 0 0 0 226 174" fill="none" stroke="url(#huGradL)" stroke-width="4"/>
+          <!-- Bold Geometric H on Left Leaf -->
+          <path d="M174 52 V140 M174 96 H220 M220 52 V140" fill="none" stroke="url(#huGradL)" stroke-width="11" stroke-linecap="square"/>
+          <!-- Center Seam Diamond Wedge Left -->
+          <polygon points="223,24 230,36 230,18" fill="#22d3ee"/>
+          <polygon points="223,168 230,156 230,174" fill="#22d3ee"/>
+          <!-- Circuit Nodes -->
+          <circle cx="152" cy="96" r="4.5" fill="#38bdf8"/>
+          <line x1="134" y1="96" x2="152" y2="96" stroke="#38bdf8" stroke-width="2.5"/>
+          <!-- Left Half of Brand Typography -->
+          <text x="229" y="212" text-anchor="end" fill="#f8fafc" font-family="Segoe UI, sans-serif" font-weight="800" font-size="32" letter-spacing="5">HUM</text>
+          <text x="229" y="234" text-anchor="end" fill="#22d3ee" font-family="Consolas, monospace" font-size="11.5" letter-spacing="2.2">AIOps &amp; CRITI</text>
         </svg>
       </div>
 
-      <!-- RIGHT DOOR LEAF (U HALF) -->
+      <!-- RIGHT DOOR LEAF (EXACT U HALF -> x >= 230) -->
       <div class="door-leaf right">
         <div class="glass-grid"></div>
         <div class="leaf-tag">GATE LEAF // R-02 [TEMPERED]</div>
         <div class="door-handle"></div>
-        <svg class="split-logo-half" viewBox="0 0 460 290">
+        <svg class="split-logo-half" viewBox="0 0 460 250">
           <defs>
             <linearGradient id="huGradR" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#22d3ee"/>
               <stop offset="100%" stop-color="#10b981"/>
             </linearGradient>
           </defs>
-          <!-- Right Arc & U Pillar -->
-          <path d="M238 30 L238 165 A45 45 0 0 0 325 165 L325 90 A95 95 0 0 1 265 210 L238 210"
-                fill="none" stroke="url(#huGradR)" stroke-width="5"/>
-          <path d="M258 25 L232 50 L232 25 Z" fill="url(#huGradR)"/>
-          <path d="M258 215 L232 190 L232 215 Z" fill="url(#huGradR)"/>
-          <circle cx="305" cy="155" r="4" fill="#2dd4bf"/>
-          <text x="232" y="255" text-anchor="start" fill="#f8fafc" font-family="Segoe UI, sans-serif" font-weight="800" font-size="34" letter-spacing="6">AN</text>
-          <text x="232" y="278" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-size="12" letter-spacing="2.5">CAL SYSTEMS</text>
+          <!-- Outer Right Circuit Ring -->
+          <path d="M234 18 A78 78 0 0 1 308 96 A78 78 0 0 1 234 174" fill="none" stroke="url(#huGradR)" stroke-width="4"/>
+          <!-- Bold Geometric U on Right Leaf -->
+          <path d="M240 52 V112 A23 23 0 0 0 286 112 V52" fill="none" stroke="url(#huGradR)" stroke-width="11" stroke-linecap="square"/>
+          <!-- Center Seam Diamond Wedge Right -->
+          <polygon points="237,24 230,36 230,18" fill="#2dd4bf"/>
+          <polygon points="237,168 230,156 230,174" fill="#2dd4bf"/>
+          <!-- Circuit Nodes -->
+          <circle cx="308" cy="96" r="4.5" fill="#10b981"/>
+          <line x1="308" y1="96" x2="326" y2="96" stroke="#10b981" stroke-width="2.5"/>
+          <!-- Right Half of Brand Typography -->
+          <text x="231" y="212" text-anchor="start" fill="#f8fafc" font-family="Segoe UI, sans-serif" font-weight="800" font-size="32" letter-spacing="5">AN</text>
+          <text x="231" y="234" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-size="11.5" letter-spacing="2.2">CAL SYSTEMS</text>
         </svg>
       </div>
     </div>
@@ -346,9 +358,9 @@ modification of this file, via any medium, is strictly prohibited.
   <div id="noc-hud">
     <div class="hud-top-bar">
       <div class="brand-compact">
-        <svg width="34" height="34" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="44" fill="none" stroke="#22d3ee" stroke-width="5"/>
-          <path d="M32 28 V72 M32 50 H48 M48 28 V72 M56 28 V58 A12 12 0 0 0 76 58 V28" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+        <svg width="36" height="36" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="#22d3ee" stroke-width="4.5"/>
+          <path d="M28 30 V70 M28 50 H46 M46 30 V70 M55 30 V56 A10 10 0 0 0 75 56 V30" fill="none" stroke="#38bdf8" stroke-width="6.5" stroke-linecap="square"/>
         </svg>
         <div>
           <div class="brand-title">HUMAN</div>
@@ -393,21 +405,19 @@ modification of this file, via any medium, is strictly prohibited.
   </div>
 
   <script>
-    // ================= THREE.JS PHOTOREALISTIC COLD-AISLE =================
     const canvas = document.getElementById('dc-canvas');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x020611);
     scene.fog = new THREE.FogExp2(0x030b1c, 0.036);
 
     const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 120);
-    let targetCamZ = 14.5; // Outside airlock threshold initially
+    let targetCamZ = 14.5;
     camera.position.set(0, 2.2, 14.5);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Lighting
     const ambient = new THREE.AmbientLight(0x1e3a8a, 1.1);
     scene.add(ambient);
 
@@ -419,7 +429,6 @@ modification of this file, via any medium, is strictly prohibited.
     corridorLight2.position.set(0, 4.4, -8);
     scene.add(corridorLight2);
 
-    // Reflective Raised Floor with Grid Tiles
     const floorGeo = new THREE.PlaneGeometry(16, 42);
     const floorMat = new THREE.MeshStandardMaterial({
       color: 0x061024, metalness: 0.85, roughness: 0.18
@@ -432,7 +441,6 @@ modification of this file, via any medium, is strictly prohibited.
     gridHelper.position.y = 0.01;
     scene.add(gridHelper);
 
-    // Overhead Linear LED Fixtures & Cable Trays
     for (let z = -16; z <= 10; z += 3.2) {
       const stripGeo = new THREE.BoxGeometry(0.18, 0.08, 2.2);
       const stripMat = new THREE.MeshBasicMaterial({ color: 0x7dd3fc });
@@ -441,7 +449,6 @@ modification of this file, via any medium, is strictly prohibited.
       scene.add(strip);
     }
 
-    // 16 High-Density 42U Server Racks (Left Row A & Right Row B)
     const racks = [];
     const rackGroup = new THREE.Group();
     scene.add(rackGroup);
@@ -458,12 +465,10 @@ modification of this file, via any medium, is strictly prohibited.
         const rackContainer = new THREE.Group();
         rackContainer.position.set(xPos, 2.0, zPos);
 
-        // Cabinet Chassis
         const box = new THREE.Mesh(new THREE.BoxGeometry(1.4, 4.0, 2.2), bodyMat);
         box.userData = { rackId };
         rackContainer.add(box);
 
-        // Glowing Front Edge Frame (Neon Red/Cyan Accent)
         const edgeX = side === 'A' ? 0.72 : -0.72;
         const frameMat = (i % 3 === 0) ? redFrameMat.clone() : cyanFrameMat.clone();
         const vBar1 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 3.9, 0.05), frameMat);
@@ -472,7 +477,6 @@ modification of this file, via any medium, is strictly prohibited.
         vBar2.position.set(edgeX, 0, -1.02);
         rackContainer.add(vBar1, vBar2);
 
-        // Server Blade LEDs inside Glass Door
         for (let u = -1.6; u <= 1.6; u += 0.28) {
           const ledStrip = new THREE.Mesh(
             new THREE.BoxGeometry(0.02, 0.08, 1.6),
@@ -487,7 +491,6 @@ modification of this file, via any medium, is strictly prohibited.
       });
     }
 
-    // Cold-Aisle Rising Airflow Particles
     const particleCount = 260;
     const pGeo = new THREE.BufferGeometry();
     const pPositions = new Float32Array(particleCount * 3);
@@ -501,7 +504,6 @@ modification of this file, via any medium, is strictly prohibited.
     const airflowParticles = new THREE.Points(pGeo, pMat);
     scene.add(airflowParticles);
 
-    // ================= AIRLOCK DOOR & ANOMALY INTERACTION =================
     const airlock = document.getElementById('airlock-overlay');
     const nocHud = document.getElementById('noc-hud');
     const ledLeft = document.getElementById('mag-led-left');
@@ -515,7 +517,7 @@ modification of this file, via any medium, is strictly prohibited.
       setTimeout(() => {
         airlock.classList.add('open');
         airlock.classList.add('unlocked');
-        targetCamZ = 4.2; // Glide straight into the Cold Aisle
+        targetCamZ = 4.2;
         nocHud.classList.add('visible');
       }, 350);
     });
@@ -527,10 +529,9 @@ modification of this file, via any medium, is strictly prohibited.
       airlock.classList.remove('open');
       ledLeft.classList.remove('green');
       ledRight.classList.remove('green');
-      lockText.textContent = 'AIRLOCK MANTAP // MAG-LOCK: ENGAGED';
+      lockText.textContent = 'AIRLOCK MANTRAP // MAG-LOCK: ENGAGED';
     });
 
-    // Anomaly Simulation on RACK-B04
     const targetB04 = racks.find(r => r.rackId === 'RACK-B04');
     document.getElementById('btn-sim-anomaly').addEventListener('click', () => {
       if (targetB04) {
@@ -570,7 +571,6 @@ modification of this file, via any medium, is strictly prohibited.
       box.innerHTML = '<strong>DURUM: NOMINAL_OPERATION</strong><br/>Tüm 42U kabinetlerde hava akışı ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde seyrediyor.';
     });
 
-    // Clickable Racks in 3D Scene
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     window.addEventListener('click', (e) => {
@@ -588,7 +588,6 @@ modification of this file, via any medium, is strictly prohibited.
       }
     });
 
-    // Mouse Parallax & Animation Loop
     let mouseX = 0, mouseY = 0;
     window.addEventListener('mousemove', (e) => {
       mouseX = (e.clientX / window.innerWidth - 0.5) * 1.4;
