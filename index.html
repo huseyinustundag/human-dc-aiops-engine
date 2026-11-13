@@ -37,7 +37,7 @@ modification of this file, via any medium, is strictly prohibited.
       z-index: 1; display: block;
     }
 
-    /* ================= FULL-SCREEN INDUSTRIAL AIRLOCK DOOR ================= */
+    /* ================= FULL-SCREEN BRAND HERO AIRLOCK ================= */
     #airlock-overlay {
       position: fixed; inset: 0; width: 100vw; height: 100vh;
       z-index: 9999; display: flex; flex-direction: column;
@@ -48,119 +48,77 @@ modification of this file, via any medium, is strictly prohibited.
       pointer-events: none; opacity: 0; visibility: hidden;
     }
 
-    /* Top Steel Sliding Rail Beam */
+    /* Subtle Top Status Rail */
     .door-rail-beam {
-      position: relative; z-index: 25; height: 48px; width: 100%;
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 70%, #020617 100%);
-      border-bottom: 2px solid #334155;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.95);
+      position: relative; z-index: 25; height: 42px; width: 100%;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.90) 100%);
+      border-bottom: 1px solid rgba(34, 211, 238, 0.25);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 32px;
+      padding: 0 28px;
       transition: transform 0.6s ease;
     }
     #airlock-overlay.open .door-rail-beam { transform: translateY(-100%); }
 
-    .rail-track {
-      position: absolute; bottom: 6px; left: 1.5%; right: 1.5%; height: 3px;
-      background: repeating-linear-gradient(90deg, #64748b 0 22px, #0f172a 22px 28px);
-    }
     .rail-status {
-      font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 2.2px;
-      color: #cbd5e1; display: flex; align-items: center; gap: 10px;
+      font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 2px;
+      color: #94a3b8; display: flex; align-items: center; gap: 10px;
     }
     .mag-led {
       width: 10px; height: 10px; border-radius: 50%;
       background: var(--red-alert);
-      box-shadow: 0 0 14px var(--red-alert);
+      box-shadow: 0 0 12px var(--red-alert);
       transition: all 0.3s ease;
     }
     .mag-led.green {
       background: var(--emerald-ok);
-      box-shadow: 0 0 18px var(--emerald-ok);
+      box-shadow: 0 0 16px var(--emerald-ok);
     }
 
     .door-leaves-wrapper {
       position: relative; flex: 1; width: 100%; display: flex; overflow: hidden;
     }
 
-    /* Armored Security Glass Door Leaves */
+    /* Two Sliding Leaves Displaying Exact Full-Screen Brand Background */
     .door-leaf {
       position: relative; width: 50%; height: 100%;
-      background:
-        radial-gradient(circle at 50% 42%, rgba(14, 165, 233, 0.14) 0%, rgba(3, 9, 22, 0.84) 58%, rgba(2, 6, 17, 0.92) 100%);
-      backdrop-filter: blur(11px);
-      -webkit-backdrop-filter: blur(11px);
-      border-top: 8px solid #1e293b;
-      border-bottom: 14px solid #090e1a;
+      background-color: #030b1a;
+      background-image:
+        url('brand-hero.webp'),
+        radial-gradient(circle at 50% 45%, rgba(14, 165, 233, 0.16) 0%, rgba(3, 11, 26, 0.96) 65%, #020612 100%);
+      background-size: 100vw calc(100vh - 42px), 100vw calc(100vh - 42px);
+      background-repeat: no-repeat;
       transition: transform 1.45s cubic-bezier(0.22, 1, 0.36, 1);
       overflow: hidden;
     }
 
     .door-leaf.left {
-      border-left: 18px solid #162033;
-      border-right: 1px solid rgba(56, 189, 248, 0.35);
-      box-shadow: inset -16px 0 36px rgba(0, 0, 0, 0.8);
+      background-position: left center;
+      border-right: 1px solid rgba(34, 211, 238, 0.22);
     }
     .door-leaf.right {
-      border-right: 18px solid #162033;
-      border-left: 1px solid rgba(56, 189, 248, 0.35);
-      box-shadow: inset 16px 0 36px rgba(0, 0, 0, 0.8);
+      background-position: right center;
+      border-left: 1px solid rgba(34, 211, 238, 0.22);
     }
 
     #airlock-overlay.open .door-leaf.left { transform: translateX(-100%); }
     #airlock-overlay.open .door-leaf.right { transform: translateX(100%); }
 
-    .glass-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(34, 211, 238, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34, 211, 238, 0.045) 1px, transparent 1px);
-      background-size: 56px 56px;
-      pointer-events: none;
-    }
-
-    /* Outer Side Brushed Titanium Handles (Completely Clear of Center Logo & Titles) */
-    .door-handle {
-      position: absolute; top: 40%; height: 22%; width: 11px;
-      background: linear-gradient(90deg, #334155 0%, #f1f5f9 45%, #64748b 75%, #1e293b 100%);
-      border-radius: 5px;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.95);
-    }
-    .door-leaf.left .door-handle { left: 32px; }
-    .door-leaf.right .door-handle { right: 32px; }
-
-    .leaf-tag {
-      position: absolute; top: 16px; font-family: 'Consolas', monospace;
-      font-size: 11px; letter-spacing: 2px; color: rgba(148, 163, 184, 0.65);
-    }
-    .door-leaf.left .leaf-tag { left: 26px; }
-    .door-leaf.right .leaf-tag { right: 26px; }
-
-    /* FULL-WIDTH BRAND EMBLEM & WIDE TYPOGRAPHY (1200px SVG -> 600px Left + 600px Right) */
-    .split-logo-half {
+    /* Fallback Vector Layer (Auto-hidden if brand-hero.webp loads) */
+    .fallback-hero-svg {
       position: absolute;
-      top: 50%;
-      transform: translateY(-54%);
-      width: 1200px;
-      height: 520px;
+      top: 0;
+      width: 100vw;
+      height: 100%;
       pointer-events: none;
-      filter: drop-shadow(0 0 32px rgba(34, 211, 238, 0.42));
     }
-    .door-leaf.left .split-logo-half { right: -600px; }
-    .door-leaf.right .split-logo-half { left: -600px; }
+    .door-leaf.left .fallback-hero-svg { left: 0; }
+    .door-leaf.right .fallback-hero-svg { right: 0; }
 
-    @media (max-width: 1100px) {
-      .split-logo-half { width: 900px; height: 420px; }
-      .door-leaf.left .split-logo-half { right: -450px; }
-      .door-leaf.right .split-logo-half { left: -450px; }
-    }
-
-    /* COMPACT OPERATOR ACCESS TERMINAL (CLEAR OF WINDOWS WATERMARK) */
+    /* COMPACT OPERATOR ACCESS TERMINAL (CLEAR OF CENTER LOGO & WATERMARK) */
     #auth-console {
       position: absolute;
       right: 36px;
-      bottom: 76px;
+      bottom: 74px;
       z-index: 30;
       width: 315px;
       max-width: 88vw;
@@ -290,7 +248,7 @@ modification of this file, via any medium, is strictly prohibited.
 
   <canvas id="dc-canvas"></canvas>
 
-  <!-- FULL-SCREEN INDUSTRIAL AIRLOCK SECURITY DOOR -->
+  <!-- FULL-SCREEN BRAND HERO AIRLOCK -->
   <div id="airlock-overlay">
     <div class="door-rail-beam">
       <div class="rail-status">
@@ -301,111 +259,101 @@ modification of this file, via any medium, is strictly prohibited.
         <span>ZONE: ANK-DC01-COLD-AISLE-B</span>
         <span class="mag-led" id="mag-led-right"></span>
       </div>
-      <div class="rail-track"></div>
     </div>
 
     <div class="door-leaves-wrapper">
-      <!-- LEFT DOOR LEAF (EXACT CENTER AT x=600) -->
+      <!-- LEFT LEAF -->
       <div class="door-leaf left">
-        <div class="glass-grid"></div>
-        <div class="leaf-tag">GATE LEAF // L-01 [ARMORED GLASS]</div>
-        <div class="door-handle"></div>
-
-        <!-- EXACT REFERENCE LOGO: LEFT HALF (H + HUMAN INF) -->
-        <svg class="split-logo-half" viewBox="0 0 1200 520">
+        <svg class="fallback-hero-svg" id="fallback-left" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <linearGradient id="metalLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id="metalL" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#38bdf8"/>
-              <stop offset="45%" stop-color="#94a3b8"/>
+              <stop offset="50%" stop-color="#94a3b8"/>
               <stop offset="100%" stop-color="#1e293b"/>
             </linearGradient>
-            <linearGradient id="cyanNeonL" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#0ea5e9"/>
-              <stop offset="100%" stop-color="#22d3ee"/>
-            </linearGradient>
-            <linearGradient id="humanTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="humanG" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="#0284c7"/>
               <stop offset="100%" stop-color="#38bdf8"/>
             </linearGradient>
           </defs>
-
-          <!-- Top Center Diamond Wedge (Left Half) -->
-          <polygon points="564,46 600,46 600,98" fill="url(#cyanNeonL)" stroke="#7dd3fc" stroke-width="1.5"/>
-
-          <!-- Outer Curved Metallic H Pillar & Crossbar -->
-          <path d="M554,56 C462,82 426,178 468,274 L502,248 C482,202 486,158 514,122 L514,166 L554,166 L554,56 Z"
-                fill="url(#metalLeft)" stroke="#38bdf8" stroke-width="2.5"/>
-          <path d="M514,196 L554,196 L554,312 L594,264 L594,112 L554,68 L554,166 L514,166 Z"
-                fill="url(#metalLeft)" stroke="#22d3ee" stroke-width="2.5"/>
-
-          <!-- Glowing Circuit Trace & Node Inside H -->
-          <path d="M492,232 C476,192 482,148 504,118" fill="none" stroke="#38bdf8" stroke-width="3"/>
-          <circle cx="505" cy="116" r="5" fill="#020617" stroke="#38bdf8" stroke-width="3"/>
-          <line x1="518" y1="181" x2="574" y2="181" stroke="#38bdf8" stroke-width="3.5"/>
-          <circle cx="576" cy="181" r="4.5" fill="#22d3ee"/>
-          <line x1="574" y1="112" x2="574" y2="255" stroke="#22d3ee" stroke-width="3"/>
-          <circle cx="574" cy="256" r="4.5" fill="#020617" stroke="#22d3ee" stroke-width="3"/>
-
-          <!-- Bottom Center Triangle Wedge (Left Half) -->
-          <polygon points="564,316 600,272 600,316" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
-
-          <!-- FULL-WIDTH HERO TITLE (LEFT HALF: "HUMAN INF") -->
-          <text x="598" y="396" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="56" letter-spacing="4">
-            <tspan fill="url(#humanTextGrad)">HUMAN</tspan>
-            <tspan fill="#f1f5f9"> INF</tspan>
+          <!-- Neural Network Mesh Left -->
+          <g stroke="rgba(56,189,248,0.16)" stroke-width="1.2">
+            <line x1="40" y1="90" x2="190" y2="160"/><line x1="190" y1="160" x2="120" y2="310"/>
+            <line x1="120" y1="310" x2="290" y2="250"/><line x1="190" y1="160" x2="340" y2="90"/>
+            <line x1="70" y1="680" x2="220" y2="750"/><line x1="220" y1="750" x2="360" y2="660"/>
+            <line x1="220" y1="750" x2="180" y2="860"/><line x1="360" y1="660" x2="480" y2="790"/>
+          </g>
+          <g fill="rgba(56,189,248,0.35)">
+            <circle cx="40" cy="90" r="3"/><circle cx="190" cy="160" r="4"/><circle cx="120" cy="310" r="3"/>
+            <circle cx="290" cy="250" r="3.5"/><circle cx="220" cy="750" r="4"/><circle cx="360" cy="660" r="3"/>
+          </g>
+          <!-- Exact HU Emblem -->
+          <polygon points="756,165 800,165 800,225" fill="#22d3ee"/>
+          <polygon points="844,165 800,165 800,225" fill="#2dd4bf"/>
+          <path d="M744,178 C625,212 580,335 634,462 L678,428 C652,368 658,310 694,264 L694,320 L744,320 L744,178 Z" fill="url(#metalL)" stroke="#38bdf8" stroke-width="2.5"/>
+          <path d="M694,360 L744,360 L744,512 L794,450 L794,250 L744,194 L744,320 L694,320 Z" fill="url(#metalL)" stroke="#22d3ee" stroke-width="2.5"/>
+          <path d="M806,250 L856,194 L856,408 C856,446 898,446 908,408 L908,225 L958,258 C996,360 958,480 856,514 L806,450 Z" fill="url(#metalL)" stroke="#2dd4bf" stroke-width="2.5"/>
+          <polygon points="756,518 800,460 800,518" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+          <polygon points="844,518 800,460 800,518" fill="#1e293b" stroke="#2dd4bf" stroke-width="1.5"/>
+          <!-- Exact Typography -->
+          <text x="800" y="612" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="60" letter-spacing="4">
+            <tspan fill="url(#humanG)">HUMAN</tspan>
+            <tspan fill="#f1f5f9"> INFRASTRUCTURE</tspan>
           </text>
-
-          <!-- WIDE SUBTITLE (LEFT HALF: "AIOps & CRITI") -->
-          <text x="599" y="444" text-anchor="end" fill="#cbd5e1" font-family="Consolas, Segoe UI, monospace" font-weight="600" font-size="25" letter-spacing="5">AIOps &amp; CRITI</text>
+          <text x="800" y="666" text-anchor="middle" fill="#cbd5e1" font-family="Consolas, Segoe UI, monospace" font-weight="600" font-size="28" letter-spacing="6">AIOps &amp; CRITICAL SYSTEMS</text>
         </svg>
       </div>
 
-      <!-- RIGHT DOOR LEAF (EXACT CENTER AT x=600) -->
+      <!-- RIGHT LEAF -->
       <div class="door-leaf right">
-        <div class="glass-grid"></div>
-        <div class="leaf-tag">GATE LEAF // R-02 [ARMORED GLASS]</div>
-        <div class="door-handle"></div>
-
-        <!-- EXACT REFERENCE LOGO: RIGHT HALF (U + RASTRUCTURE) -->
-        <svg class="split-logo-half" viewBox="0 0 1200 520">
+        <svg class="fallback-hero-svg" id="fallback-right" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
           <defs>
-            <linearGradient id="metalRight" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#22d3ee"/>
-              <stop offset="50%" stop-color="#34d399"/>
-              <stop offset="100%" stop-color="#334155"/>
+            <linearGradient id="metalR" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#94a3b8"/>
+              <stop offset="100%" stop-color="#1e293b"/>
             </linearGradient>
-            <linearGradient id="tealNeonR" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#22d3ee"/>
-              <stop offset="100%" stop-color="#10b981"/>
+            <linearGradient id="humanGR" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#0284c7"/>
+              <stop offset="100%" stop-color="#38bdf8"/>
             </linearGradient>
           </defs>
-
-          <!-- Top Center Diamond Wedge (Right Half) -->
-          <polygon points="636,46 600,46 600,98" fill="url(#tealNeonR)" stroke="#6ee7b7" stroke-width="1.5"/>
-
-          <!-- Inner & Outer Curved Metallic U Shape -->
-          <path d="M606,112 L646,68 L646,232 C646,262 678,262 686,232 L686,92 L724,118 C754,196 724,288 646,314 L606,264 Z"
-                fill="url(#metalRight)" stroke="#2dd4bf" stroke-width="2.5"/>
-
-          <!-- Glowing Circuit Trace & Node Inside U -->
-          <path d="M626,112 L626,246 C626,282 676,288 702,256" fill="none" stroke="#22d3ee" stroke-width="3"/>
-          <circle cx="704" cy="254" r="5" fill="#020617" stroke="#22d3ee" stroke-width="3"/>
-          <path d="M706,132 C722,172 716,214 694,242" fill="none" stroke="#34d399" stroke-width="3"/>
-          <circle cx="693" cy="244" r="4.5" fill="#10b981"/>
-
-          <!-- Bottom Center Triangle Wedge (Right Half) -->
-          <polygon points="636,316 600,272 600,316" fill="#1e293b" stroke="#2dd4bf" stroke-width="1.5"/>
-
-          <!-- FULL-WIDTH HERO TITLE (RIGHT HALF: "RASTRUCTURE") -->
-          <text x="602" y="396" text-anchor="start" fill="#f1f5f9" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="56" letter-spacing="4">RASTRUCTURE</text>
-
-          <!-- WIDE SUBTITLE (RIGHT HALF: "CAL SYSTEMS") -->
-          <text x="601" y="444" text-anchor="start" fill="#cbd5e1" font-family="Consolas, Segoe UI, monospace" font-weight="600" font-size="25" letter-spacing="5">CAL SYSTEMS</text>
+          <!-- Binary Matrix Rain Right -->
+          <g fill="rgba(45,212,191,0.18)" font-family="Consolas, monospace" font-size="14">
+            <text x="1280" y="140">0 1 1 0 1 0 0 1 1 0</text>
+            <text x="1310" y="175">1 0 0 1 1 1 0 1 0 1</text>
+            <text x="1260" y="210">0 1 0 1 0 1 1 0 1 0</text>
+            <text x="1330" y="245">1 1 0 0 1 0 1 1 0 1</text>
+            <text x="1290" y="280">0 0 1 1 0 1 0 1 1 0</text>
+            <text x="1320" y="315">1 0 1 0 1 1 0 0 1 1</text>
+            <text x="1270" y="350">0 1 1 0 0 1 1 0 1 0</text>
+            <text x="1300" y="385">1 1 0 1 0 0 1 1 0 1</text>
+            <text x="1340" y="420">0 1 0 1 1 0 1 0 1 1</text>
+            <text x="1280" y="455">1 0 1 1 0 1 0 1 0 0</text>
+            <text x="1310" y="490">0 1 0 0 1 1 1 0 1 1</text>
+            <text x="1350" y="525">1 1 0 1 0 1 0 1 1 0</text>
+            <text x="1290" y="560">0 0 1 1 1 0 1 0 0 1</text>
+            <text x="1320" y="595">1 0 1 0 0 1 1 1 0 1</text>
+          </g>
+          <!-- Exact HU Emblem -->
+          <polygon points="756,165 800,165 800,225" fill="#22d3ee"/>
+          <polygon points="844,165 800,165 800,225" fill="#2dd4bf"/>
+          <path d="M744,178 C625,212 580,335 634,462 L678,428 C652,368 658,310 694,264 L694,320 L744,320 L744,178 Z" fill="url(#metalR)" stroke="#38bdf8" stroke-width="2.5"/>
+          <path d="M694,360 L744,360 L744,512 L794,450 L794,250 L744,194 L744,320 L694,320 Z" fill="url(#metalR)" stroke="#22d3ee" stroke-width="2.5"/>
+          <path d="M806,250 L856,194 L856,408 C856,446 898,446 908,408 L908,225 L958,258 C996,360 958,480 856,514 L806,450 Z" fill="url(#metalR)" stroke="#2dd4bf" stroke-width="2.5"/>
+          <polygon points="756,518 800,460 800,518" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+          <polygon points="844,518 800,460 800,518" fill="#1e293b" stroke="#2dd4bf" stroke-width="1.5"/>
+          <!-- Exact Typography -->
+          <text x="800" y="612" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-weight="800" font-size="60" letter-spacing="4">
+            <tspan fill="url(#humanGR)">HUMAN</tspan>
+            <tspan fill="#f1f5f9"> INFRASTRUCTURE</tspan>
+          </text>
+          <text x="800" y="666" text-anchor="middle" fill="#cbd5e1" font-family="Consolas, Segoe UI, monospace" font-weight="600" font-size="28" letter-spacing="6">AIOps &amp; CRITICAL SYSTEMS</text>
         </svg>
       </div>
     </div>
 
-    <!-- COMPACT SIDE ACCESS TERMINAL -->
+    <!-- COMPACT OPERATOR ACCESS TERMINAL -->
     <div id="auth-console">
       <div class="auth-header">
         <span>HUMAN // NOC ACCESS</span>
@@ -475,6 +423,14 @@ modification of this file, via any medium, is strictly prohibited.
   </div>
 
   <script>
+    // Auto-hide vector fallback if brand-hero.webp exists in repository
+    const imgCheck = new Image();
+    imgCheck.onload = () => {
+      document.getElementById('fallback-left').style.display = 'none';
+      document.getElementById('fallback-right').style.display = 'none';
+    };
+    imgCheck.src = 'brand-hero.webp';
+
     function createServerRackTexture() {
       const c = document.createElement('canvas');
       c.width = 256;
@@ -491,7 +447,6 @@ modification of this file, via any medium, is strictly prohibited.
         }
       }
 
-      // Top-of-Rack (ToR) 400GbE Fiber Switch
       ctx.fillStyle = '#0f294a';
       ctx.fillRect(14, 12, 228, 34);
       ctx.strokeStyle = '#38bdf8';
@@ -504,7 +459,6 @@ modification of this file, via any medium, is strictly prohibited.
         ctx.fillRect(22 + p * 13, 32, 9, 6);
       }
 
-      // 21 High-Density Compute & Storage Blades
       for (let u = 0; u < 21; u++) {
         const y = 56 + u * 21;
         ctx.fillStyle = '#0c1424';
@@ -576,266 +530,4 @@ modification of this file, via any medium, is strictly prohibited.
 
     for (let z = -16; z <= 10; z += 3.0) {
       const strip = new THREE.Mesh(
-        new THREE.BoxGeometry(0.16, 0.06, 2.1),
-        new THREE.MeshBasicMaterial({ color: 0xbae6fd })
-      );
-      strip.position.set(0, 4.5, z);
-      scene.add(strip);
-    }
-
-    // LAYER-1 OVERHEAD CABLE TRAYS & FIBER TRUNKS
-    const cablingGroup = new THREE.Group();
-    scene.add(cablingGroup);
-
-    const traySteelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.25 });
-    const fiberOm4Mat = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
-    const powerTrunkMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
-
-    [-2.5, 2.5].forEach((xTray) => {
-      const railL = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.12, 26), traySteelMat);
-      railL.position.set(xTray - 0.35, 4.22, -2);
-      const railR = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.12, 26), traySteelMat);
-      railR.position.set(xTray + 0.35, 4.22, -2);
-      cablingGroup.add(railL, railR);
-
-      for (let z = -14.5; z <= 10.5; z += 0.8) {
-        const rung = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.03, 0.04), traySteelMat);
-        rung.position.set(xTray, 4.17, z);
-        cablingGroup.add(rung);
-      }
-
-      const fiberBundle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 26, 8), fiberOm4Mat);
-      fiberBundle.rotation.x = Math.PI / 2;
-      fiberBundle.position.set(xTray - 0.12, 4.23, -2);
-
-      const powerBus = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 26, 8), powerTrunkMat);
-      powerBus.rotation.x = Math.PI / 2;
-      powerBus.position.set(xTray + 0.14, 4.23, -2);
-
-      cablingGroup.add(fiberBundle, powerBus);
-    });
-
-    for (let z = 8.2; z >= -11.5; z -= 5.5) {
-      const bridge = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.08, 0.45), traySteelMat);
-      bridge.position.set(0, 4.32, z);
-      const bridgeFiber = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 5.1, 8), fiberOm4Mat);
-      bridgeFiber.rotation.z = Math.PI / 2;
-      bridgeFiber.position.set(0, 4.36, z);
-      cablingGroup.add(bridge, bridgeFiber);
-    }
-
-    // 16 HIGH-DENSITY 42U RACKS
-    const rackFaceTex = createServerRackTexture();
-    const racks = [];
-    const rackGroup = new THREE.Group();
-    scene.add(rackGroup);
-
-    const sideMat = new THREE.MeshStandardMaterial({ color: 0x080e1c, metalness: 0.75, roughness: 0.28 });
-    const frontFaceMat = new THREE.MeshStandardMaterial({
-      map: rackFaceTex, metalness: 0.45, roughness: 0.35, emissive: 0x061830, emissiveIntensity: 0.5
-    });
-
-    for (let i = 0; i < 8; i++) {
-      const zPos = 8.2 - i * 2.75;
-      ['A', 'B'].forEach((side) => {
-        const xPos = side === 'A' ? -3.05 : 3.05;
-        const rackId = `RACK-${side}0${i + 1}`;
-        const rackContainer = new THREE.Group();
-        rackContainer.position.set(xPos, 2.05, zPos);
-
-        const box = new THREE.Mesh(new THREE.BoxGeometry(1.45, 4.05, 2.2), sideMat);
-        box.userData = { rackId };
-        rackContainer.add(box);
-
-        const facePlane = new THREE.Mesh(new THREE.PlaneGeometry(2.08, 3.92), frontFaceMat);
-        if (side === 'A') {
-          facePlane.rotation.y = Math.PI / 2;
-          facePlane.position.x = 0.735;
-        } else {
-          facePlane.rotation.y = -Math.PI / 2;
-          facePlane.position.x = -0.735;
-        }
-        facePlane.userData = { rackId };
-        rackContainer.add(facePlane);
-
-        const dropX = side === 'A' ? 0.52 : -0.52;
-        const fiberDrop = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.35, 8), fiberOm4Mat);
-        fiberDrop.position.set(xPos + dropX, 4.15, zPos + 0.45);
-        cablingGroup.add(fiberDrop);
-
-        const edgeX = side === 'A' ? 0.745 : -0.745;
-        const isThermalHighlight = (i === 1 || i === 4 || i === 6);
-        const frameMat = new THREE.MeshBasicMaterial({
-          color: isThermalHighlight ? 0xef4444 : 0x22d3ee
-        });
-
-        const vBar1 = new THREE.Mesh(new THREE.BoxGeometry(0.045, 3.98, 0.045), frameMat);
-        vBar1.position.set(edgeX, 0, 1.06);
-        const vBar2 = new THREE.Mesh(new THREE.BoxGeometry(0.045, 3.98, 0.045), frameMat);
-        vBar2.position.set(edgeX, 0, -1.06);
-        rackContainer.add(vBar1, vBar2);
-
-        rackGroup.add(rackContainer);
-        racks.push({ rackId, mesh: box, facePlane, vBar1, vBar2 });
-      });
-    }
-
-    const packetCount = 48;
-    const pktGeo = new THREE.BufferGeometry();
-    const pktPos = new Float32Array(packetCount * 3);
-    for (let i = 0; i < packetCount; i++) {
-      pktPos[i * 3] = (i % 2 === 0) ? -2.62 : 2.38;
-      pktPos[i * 3 + 1] = 4.26;
-      pktPos[i * 3 + 2] = -14 + Math.random() * 24;
-    }
-    pktGeo.setAttribute('position', new THREE.BufferAttribute(pktPos, 3));
-    const pktMat = new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.14 });
-    const opticalPackets = new THREE.Points(pktGeo, pktMat);
-    cablingGroup.add(opticalPackets);
-
-    const particleCount = 220;
-    const pGeo = new THREE.BufferGeometry();
-    const pPositions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount; i++) {
-      pPositions[i * 3] = (Math.random() - 0.5) * 4.0;
-      pPositions[i * 3 + 1] = Math.random() * 4.1;
-      pPositions[i * 3 + 2] = (Math.random() - 0.5) * 24;
-    }
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-    const pMat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.06, transparent: true, opacity: 0.55 });
-    const airflowParticles = new THREE.Points(pGeo, pMat);
-    scene.add(airflowParticles);
-
-    const airlock = document.getElementById('airlock-overlay');
-    const nocHud = document.getElementById('noc-hud');
-    const ledLeft = document.getElementById('mag-led-left');
-    const ledRight = document.getElementById('mag-led-right');
-    const lockText = document.getElementById('lock-status-text');
-
-    document.getElementById('btn-unlock').addEventListener('click', () => {
-      ledLeft.classList.add('green');
-      ledRight.classList.add('green');
-      lockText.textContent = 'ACCESS GRANTED // AIRLOCK OPENING...';
-      setTimeout(() => {
-        airlock.classList.add('open');
-        targetCamZ = 4.6;
-        nocHud.classList.add('visible');
-      }, 280);
-    });
-
-    document.getElementById('btn-relock').addEventListener('click', () => {
-      nocHud.classList.remove('visible');
-      targetCamZ = 14.2;
-      airlock.classList.remove('open');
-      ledLeft.classList.remove('green');
-      ledRight.classList.remove('green');
-      lockText.textContent = 'AIRLOCK MANTRAP // MAG-LOCK: ENGAGED';
-    });
-
-    const btnCables = document.getElementById('btn-toggle-cables');
-    let cablesVisible = true;
-    btnCables.addEventListener('click', () => {
-      cablesVisible = !cablesVisible;
-      cablingGroup.visible = cablesVisible;
-      btnCables.textContent = cablesVisible ? 'Katman-1 Fiber & Bağlantılar: AÇIK' : 'Katman-1 Fiber & Bağlantılar: KAPALI';
-      btnCables.classList.toggle('active', cablesVisible);
-    });
-
-    const targetB04 = racks.find(r => r.rackId === 'RACK-B04');
-    document.getElementById('btn-sim-anomaly').addEventListener('click', () => {
-      if (targetB04) {
-        targetB04.vBar1.material.color.setHex(0xff1e1e);
-        targetB04.vBar2.material.color.setHex(0xff1e1e);
-      }
-      document.getElementById('selected-rack-label').textContent = 'RACK-B04 [CRITICAL]';
-      document.getElementById('m-inlet').textContent = '24.8 °C';
-      document.getElementById('m-exhaust').textContent = '43.2 °C';
-      document.getElementById('m-exhaust').classList.add('alert');
-      document.getElementById('m-deltat').textContent = '18.4 °C';
-      document.getElementById('m-deltat').classList.add('alert');
-      document.getElementById('m-power').textContent = '6.4 kW / 86%';
-      document.getElementById('m-power').classList.add('alert');
-      document.getElementById('ai-score-badge').textContent = 'SCORE: -0.218';
-      const box = document.getElementById('ai-diagnosis-text');
-      box.classList.add('anomaly');
-      box.innerHTML = '<strong>ANOMALİ: REAR_EXHAUST_IMPEDANCE</strong><br/>RACK-B04 giriş sıcaklığı normal ancak egzos Delta-T (18.4°C) kritik eşiği aştı. Kabinet arkası Katman-1 kablo yoğunluğu hava tahliyesini engelliyor.';
-    });
-
-    document.getElementById('btn-reset-normal').addEventListener('click', () => {
-      if (targetB04) {
-        targetB04.vBar1.material.color.setHex(0x22d3ee);
-        targetB04.vBar2.material.color.setHex(0x22d3ee);
-      }
-      document.getElementById('selected-rack-label').textContent = 'RACK-B04';
-      document.getElementById('m-inlet').textContent = '22.4 °C';
-      document.getElementById('m-exhaust').textContent = '31.8 °C';
-      document.getElementById('m-exhaust').classList.remove('alert');
-      document.getElementById('m-deltat').textContent = '9.4 °C';
-      document.getElementById('m-deltat').classList.remove('alert');
-      document.getElementById('m-power').textContent = '5.8 kW / 42%';
-      document.getElementById('m-power').classList.remove('alert');
-      document.getElementById('ai-score-badge').textContent = 'SCORE: +0.142';
-      const box = document.getElementById('ai-diagnosis-text');
-      box.classList.remove('anomaly');
-      box.innerHTML = '<strong>DURUM: NOMINAL_OPERATION</strong><br/>Tüm 42U kabinetlerde hava akışı, OM4 fiber optik bağlantılar ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde.';
-    });
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    window.addEventListener('click', (e) => {
-      if (!nocHud.classList.contains('visible')) return;
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const targets = racks.flatMap(r => [r.mesh, r.facePlane]);
-      const hits = raycaster.intersectObjects(targets);
-      if (hits.length > 0) {
-        const id = hits[0].object.userData.rackId;
-        document.getElementById('selected-rack-label').textContent = id;
-        document.getElementById('m-inlet').textContent = (21.8 + Math.random() * 1.4).toFixed(1) + ' °C';
-        document.getElementById('m-exhaust').textContent = (30.5 + Math.random() * 2.5).toFixed(1) + ' °C';
-        document.getElementById('m-link').textContent = '400GbE UP (-0.' + Math.floor(2 + Math.random() * 5) + ' dB)';
-        document.getElementById('m-power').textContent = (5.2 + Math.random() * 1.6).toFixed(1) + ' kW / 44%';
-      }
-    });
-
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 1.2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
-    });
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      camera.position.z += (targetCamZ - camera.position.z) * 0.038;
-      camera.position.x += (mouseX - camera.position.x) * 0.04;
-      camera.position.y += ((2.15 - mouseY) - camera.position.y) * 0.04;
-      camera.lookAt(0, 2.05, -10);
-
-      const pos = airflowParticles.geometry.attributes.position.array;
-      for (let i = 0; i < particleCount; i++) {
-        pos[i * 3 + 1] += 0.014;
-        if (pos[i * 3 + 1] > 4.2) pos[i * 3 + 1] = 0.05;
-      }
-      airflowParticles.geometry.attributes.position.needsUpdate = true;
-
-      const pArr = opticalPackets.geometry.attributes.position.array;
-      for (let i = 0; i < packetCount; i++) {
-        pArr[i * 3 + 2] -= (i % 2 === 0) ? 0.09 : -0.09;
-        if (pArr[i * 3 + 2] < -14.5) pArr[i * 3 + 2] = 10.5;
-        if (pArr[i * 3 + 2] > 10.5) pArr[i * 3 + 2] = -14.5;
-      }
-      opticalPackets.geometry.attributes.position.needsUpdate = true;
-
-      renderer.render(scene, camera);
-    }
-    animate();
-  </script>
-</body>
-</html>
+        new THREE.Box
