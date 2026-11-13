@@ -37,140 +37,190 @@ modification of this file, via any medium, is strictly prohibited.
       z-index: 1; display: block;
     }
 
-    /* ================= INDUSTRIAL AIRLOCK SECURITY DOOR ================= */
+    /* ================= FULL-SCREEN INDUSTRIAL AIRLOCK DOOR ================= */
     #airlock-overlay {
-      position: fixed; inset: 0; z-index: 9999;
-      display: flex; flex-direction: column;
-      pointer-events: auto;
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.6s ease 0.95s, visibility 0.6s ease 0.95s;
+      position: fixed; inset: 0; width: 100vw; height: 100vh;
+      z-index: 9999; display: flex; flex-direction: column;
+      pointer-events: auto; opacity: 1; visibility: visible;
+      transition: opacity 0.65s ease 0.95s, visibility 0.65s ease 0.95s;
     }
     #airlock-overlay.open {
-      pointer-events: none;
-      opacity: 0;
-      visibility: hidden;
+      pointer-events: none; opacity: 0; visibility: hidden;
     }
 
-    /* Top Steel Sliding Rail Beam */
+    /* Top Heavy Steel Overhead Gantry & Sliding Rail */
     .door-rail-beam {
-      position: relative; z-index: 20; height: 48px; width: 100%;
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 72%, #020617 100%);
+      position: relative; z-index: 25; height: 54px; width: 100%;
+      background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 6px),
+        linear-gradient(180deg, #1e293b 0%, #0f172a 68%, #020617 100%);
       border-bottom: 2px solid #334155;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.95);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 28px;
-      transition: transform 0.55s ease;
+      padding: 0 32px;
+      transition: transform 0.6s ease;
     }
     #airlock-overlay.open .door-rail-beam { transform: translateY(-100%); }
 
     .rail-track {
-      position: absolute; bottom: 6px; left: 2%; right: 2%; height: 3px;
-      background: repeating-linear-gradient(90deg, #475569 0 18px, #1e293b 18px 24px);
+      position: absolute; bottom: 7px; left: 1.5%; right: 1.5%; height: 4px;
+      background: repeating-linear-gradient(90deg, #64748b 0 22px, #0f172a 22px 28px);
+      border-radius: 2px;
     }
     .rail-status {
-      font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 2px;
-      color: #94a3b8; display: flex; align-items: center; gap: 10px;
+      font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 2.2px;
+      color: #cbd5e1; display: flex; align-items: center; gap: 10px;
     }
     .mag-led {
-      width: 10px; height: 10px; border-radius: 50%;
+      width: 11px; height: 11px; border-radius: 50%;
       background: var(--red-alert);
-      box-shadow: 0 0 12px var(--red-alert);
+      box-shadow: 0 0 14px var(--red-alert);
       transition: all 0.3s ease;
     }
     .mag-led.green {
       background: var(--emerald-ok);
-      box-shadow: 0 0 16px var(--emerald-ok);
+      box-shadow: 0 0 18px var(--emerald-ok);
     }
 
-    /* Double-Leaf Doors Container */
+    /* Double-Leaf Doors Wrapper */
     .door-leaves-wrapper {
       position: relative; flex: 1; width: 100%; display: flex; overflow: hidden;
     }
 
+    /* Realistic Brushed Metal & Armored Security Glass Door Leaves */
     .door-leaf {
       position: relative; width: 50%; height: 100%;
-      background: linear-gradient(135deg, rgba(6, 14, 30, 0.78) 0%, rgba(2, 8, 20, 0.72) 100%);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-top: 6px solid #1e293b;
-      border-bottom: 10px solid #0f172a;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(34, 211, 238, 0.08) 0%, transparent 62%),
+        linear-gradient(135deg, rgba(8, 17, 36, 0.84) 0%, rgba(3, 8, 20, 0.78) 100%);
+      backdrop-filter: blur(11px);
+      -webkit-backdrop-filter: blur(11px);
+      border-top: 10px solid #1e293b;
+      border-bottom: 18px solid #090e1a;
       transition: transform 1.45s cubic-bezier(0.22, 1, 0.36, 1);
       overflow: hidden;
     }
 
+    /* Outer Heavy Steel Frame Pillars */
     .door-leaf.left {
-      border-left: 14px solid #1e293b;
-      border-right: 1px solid rgba(34, 211, 238, 0.35);
-      box-shadow: inset -12px 0 26px rgba(0, 0, 0, 0.7);
+      border-left: 24px solid #162033;
+      border-right: 2px solid rgba(34, 211, 238, 0.45);
+      box-shadow: inset -18px 0 36px rgba(0, 0, 0, 0.78), inset 6px 0 14px rgba(56, 189, 248, 0.12);
     }
     .door-leaf.right {
-      border-right: 14px solid #1e293b;
-      border-left: 1px solid rgba(34, 211, 238, 0.35);
-      box-shadow: inset 12px 0 26px rgba(0, 0, 0, 0.7);
+      border-right: 24px solid #162033;
+      border-left: 2px solid rgba(34, 211, 238, 0.45);
+      box-shadow: inset 18px 0 36px rgba(0, 0, 0, 0.78), inset -6px 0 14px rgba(56, 189, 248, 0.12);
     }
 
     #airlock-overlay.open .door-leaf.left { transform: translateX(-100%); }
     #airlock-overlay.open .door-leaf.right { transform: translateX(100%); }
 
-    /* Vertical Brushed Steel Handles - Positioned Safely Clear of Center Emblem */
-    .door-handle {
-      position: absolute; top: 44%; height: 22%; width: 10px;
-      background: linear-gradient(90deg, #475569, #e2e8f0, #334155);
-      border-radius: 4px;
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.9);
-    }
-    .door-leaf.left .door-handle { right: 44px; }
-    .door-leaf.right .door-handle { left: 44px; }
-
+    /* Industrial Structural Crossbars & Glass Tech Grid */
     .glass-grid {
       position: absolute; inset: 0;
       background-image:
-        linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
+        linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+      background-size: 56px 56px;
       pointer-events: none;
+    }
+
+    /* Horizontal Armored Door Mullion Bar (Below Center Emblem) */
+    .door-mullion {
+      position: absolute; top: 64%; left: 0; right: 0; height: 14px;
+      background: linear-gradient(180deg, #334155 0%, #0f172a 55%, #020617 100%);
+      border-top: 1px solid rgba(148, 163, 184, 0.25);
+      border-bottom: 1px solid rgba(34, 211, 238, 0.25);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Bottom Floor Caution Threshold Strip */
+    .floor-hazard-bar {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 10px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #0f172a 0px,
+        #0f172a 12px,
+        rgba(34, 211, 238, 0.45) 12px,
+        rgba(34, 211, 238, 0.45) 24px
+      );
+      border-top: 1px solid rgba(34, 211, 238, 0.5);
+    }
+
+    /* Realistic Vertical Brushed Titanium Door Handles (Placed on Outer Side of Glass, Zero Text Overlap) */
+    .door-handle {
+      position: absolute; top: 42%; height: 20%; width: 12px;
+      background: linear-gradient(90deg, #334155 0%, #f1f5f9 45%, #64748b 75%, #1e293b 100%);
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.95), 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+    .door-handle::before, .door-handle::after {
+      content: ''; position: absolute; width: 18px; height: 10px;
+      background: #1e293b; border: 1px solid #475569; border-radius: 2px;
+    }
+    .door-handle::before { top: 14px; }
+    .door-handle::after { bottom: 14px; }
+
+    .door-leaf.left .door-handle { left: 42px; }
+    .door-leaf.left .door-handle::before, .door-leaf.left .door-handle::after { left: -12px; }
+
+    .door-leaf.right .door-handle { right: 42px; }
+    .door-leaf.right .door-handle::before, .door-leaf.right .door-handle::after { right: -12px; }
+
+    /* Biometric Laser Scan Line Across Center Seam */
+    .laser-scanline {
+      position: absolute; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent 5%, rgba(34, 211, 238, 0.85) 50%, transparent 95%);
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.9);
+      animation: scanSweep 4.5s ease-in-out infinite;
+      pointer-events: none; z-index: 15;
+    }
+    @keyframes scanSweep {
+      0%, 100% { top: 14%; opacity: 0.25; }
+      50% { top: 60%; opacity: 0.95; }
     }
 
     .leaf-tag {
-      position: absolute; top: 16px; font-family: 'Consolas', monospace;
-      font-size: 11px; letter-spacing: 2px; color: rgba(148, 163, 184, 0.65);
+      position: absolute; top: 18px; font-family: 'Consolas', monospace;
+      font-size: 11px; letter-spacing: 2px; color: rgba(148, 163, 184, 0.72);
     }
-    .door-leaf.left .leaf-tag { left: 22px; }
-    .door-leaf.right .leaf-tag { right: 22px; }
+    .door-leaf.left .leaf-tag { left: 26px; }
+    .door-leaf.right .leaf-tag { right: 26px; }
 
-    /* UPPER-CENTER EMBLEM BADGE (CLEAR OF HANDLES & SIDE TERMINAL) */
+    /* SEAMLESS CENTER EMBLEM (560px SVG -> 280px Left Half + 280px Right Half) */
     .split-logo-half {
       position: absolute;
-      top: 12%;
-      width: 520px;
-      height: 270px;
+      top: 15%;
+      width: 560px;
+      height: 290px;
       pointer-events: none;
-      filter: drop-shadow(0 0 26px rgba(34, 211, 238, 0.45));
+      filter: drop-shadow(0 0 30px rgba(34, 211, 238, 0.45));
     }
-    .door-leaf.left .split-logo-half { right: -260px; }
-    .door-leaf.right .split-logo-half { left: -260px; }
+    .door-leaf.left .split-logo-half { right: -280px; }
+    .door-leaf.right .split-logo-half { left: -280px; }
 
-    /* WALL-MOUNTED SIDE ACCESS TERMINAL (RIGHT SIDE - LEAVES CENTER GLASS CLEAR) */
+    /* WALL-MOUNTED BIOMETRIC ACCESS READER (RIGHT SIDE FRAME - UNOBSTRUCTED CENTER) */
     #auth-console {
       position: absolute;
-      right: 44px;
-      bottom: 44px;
+      right: 48px;
+      bottom: 42px;
       z-index: 30;
-      width: 340px;
-      max-width: 88vw;
-      background: rgba(4, 10, 22, 0.94);
+      width: 345px;
+      max-width: 90vw;
+      background: linear-gradient(160deg, rgba(7, 15, 32, 0.95) 0%, rgba(3, 8, 19, 0.97) 100%);
       border: 1px solid rgba(34, 211, 238, 0.55);
       border-left: 4px solid var(--cyan-neon);
       border-radius: 12px;
       padding: 18px 20px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95), 0 0 34px rgba(34, 211, 238, 0.20);
+      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.96), 0 0 36px rgba(34, 211, 238, 0.22);
       backdrop-filter: blur(18px);
       transition: opacity 0.35s ease, transform 0.35s ease;
     }
     #airlock-overlay.open #auth-console {
       opacity: 0;
-      transform: translateX(40px);
+      transform: translateX(45px);
       pointer-events: none;
     }
 
@@ -199,12 +249,12 @@ modification of this file, via any medium, is strictly prohibited.
       border: 1px solid #38bdf8; border-radius: 7px;
       color: #ffffff; font-weight: 700; font-size: 12px; letter-spacing: 1.6px;
       cursor: pointer; text-transform: uppercase;
-      box-shadow: 0 0 20px rgba(14, 165, 233, 0.45);
+      box-shadow: 0 0 22px rgba(14, 165, 233, 0.48);
       transition: all 0.25s ease;
     }
     #btn-unlock:hover {
-      filter: brightness(1.15);
-      box-shadow: 0 0 28px rgba(34, 211, 238, 0.72);
+      filter: brightness(1.16);
+      box-shadow: 0 0 30px rgba(34, 211, 238, 0.75);
     }
 
     /* ================= INSIDE NOC TELEMETRY HUD ================= */
@@ -285,7 +335,7 @@ modification of this file, via any medium, is strictly prohibited.
 
   <canvas id="dc-canvas"></canvas>
 
-  <!-- INDUSTRIAL AIRLOCK SECURITY DOOR -->
+  <!-- FULL-SCREEN INDUSTRIAL AIRLOCK SECURITY DOOR -->
   <div id="airlock-overlay">
     <div class="door-rail-beam">
       <div class="rail-status">
@@ -300,68 +350,76 @@ modification of this file, via any medium, is strictly prohibited.
     </div>
 
     <div class="door-leaves-wrapper">
-      <!-- LEFT DOOR LEAF -->
+      <div class="laser-scanline"></div>
+
+      <!-- LEFT DOOR LEAF (EXACT CENTER AT x=280) -->
       <div class="door-leaf left">
         <div class="glass-grid"></div>
-        <div class="leaf-tag">GATE LEAF // L-01 [TEMPERED]</div>
+        <div class="leaf-tag">GATE LEAF // L-01 [ARMORED GLASS]</div>
         <div class="door-handle"></div>
-        <svg class="split-logo-half" viewBox="0 0 520 270">
+        <div class="door-mullion"></div>
+        <div class="floor-hazard-bar"></div>
+
+        <svg class="split-logo-half" viewBox="0 0 560 290">
           <defs>
             <linearGradient id="huGradL" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#38bdf8"/>
               <stop offset="100%" stop-color="#22d3ee"/>
             </linearGradient>
           </defs>
-          <!-- High-Contrast Frosted Glass Emblem Plate (Left Half) -->
-          <rect x="75" y="10" width="185" height="248" rx="14" fill="rgba(3, 8, 20, 0.84)" stroke="rgba(34, 211, 238, 0.35)" stroke-width="1.5"/>
-          <!-- Left Circuit Arc -->
-          <path d="M254 26 A72 72 0 0 0 186 98 A72 72 0 0 0 254 170" fill="none" stroke="url(#huGradL)" stroke-width="4"/>
+          <!-- Armored Glass Emblem Housing (Left Half) -->
+          <rect x="65" y="10" width="215" height="268" rx="16" fill="rgba(3, 9, 22, 0.88)" stroke="rgba(34, 211, 238, 0.42)" stroke-width="1.5"/>
+          <!-- Outer Left Circuit Ring -->
+          <path d="M274 28 A76 76 0 0 0 202 104 A76 76 0 0 0 274 180" fill="none" stroke="url(#huGradL)" stroke-width="4.5"/>
           <!-- Bold Geometric H -->
-          <path d="M206 58 V138 M206 98 H248 M248 58 V138" fill="none" stroke="url(#huGradL)" stroke-width="11" stroke-linecap="square"/>
+          <path d="M224 62 V146 M224 104 H268 M268 62 V146" fill="none" stroke="url(#huGradL)" stroke-width="12" stroke-linecap="square"/>
           <!-- Center Seam Wedges -->
-          <polygon points="252,32 260,44 260,26" fill="#22d3ee"/>
-          <polygon points="252,164 260,152 260,170" fill="#22d3ee"/>
+          <polygon points="272,34 280,46 280,28" fill="#22d3ee"/>
+          <polygon points="272,174 280,162 280,180" fill="#22d3ee"/>
           <!-- Circuit Node -->
-          <circle cx="186" cy="98" r="4.5" fill="#38bdf8"/>
-          <line x1="166" y1="98" x2="186" y2="98" stroke="#38bdf8" stroke-width="2.5"/>
-          <!-- Crisp Brand Typography (Left Half) -->
-          <text x="259" y="212" text-anchor="end" fill="#ffffff" font-family="Segoe UI, sans-serif" font-weight="800" font-size="33" letter-spacing="5">HUM</text>
-          <text x="259" y="236" text-anchor="end" fill="#38bdf8" font-family="Consolas, monospace" font-weight="700" font-size="11.5" letter-spacing="2">AIOps &amp; CRITI</text>
+          <circle cx="202" cy="104" r="5" fill="#38bdf8"/>
+          <line x1="178" y1="104" x2="202" y2="104" stroke="#38bdf8" stroke-width="2.5"/>
+          <!-- Seamless Brand Typography (Left Half: HUM) -->
+          <text x="279" y="226" text-anchor="end" fill="#ffffff" font-family="Segoe UI, sans-serif" font-weight="800" font-size="36" letter-spacing="4">HUM</text>
+          <text x="279" y="252" text-anchor="end" fill="#38bdf8" font-family="Consolas, monospace" font-weight="700" font-size="12" letter-spacing="1.8">AIOps &amp; CRITI</text>
         </svg>
       </div>
 
-      <!-- RIGHT DOOR LEAF -->
+      <!-- RIGHT DOOR LEAF (EXACT CENTER AT x=280) -->
       <div class="door-leaf right">
         <div class="glass-grid"></div>
-        <div class="leaf-tag">GATE LEAF // R-02 [TEMPERED]</div>
+        <div class="leaf-tag">GATE LEAF // R-02 [ARMORED GLASS]</div>
         <div class="door-handle"></div>
-        <svg class="split-logo-half" viewBox="0 0 520 270">
+        <div class="door-mullion"></div>
+        <div class="floor-hazard-bar"></div>
+
+        <svg class="split-logo-half" viewBox="0 0 560 290">
           <defs>
             <linearGradient id="huGradR" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#22d3ee"/>
               <stop offset="100%" stop-color="#10b981"/>
             </linearGradient>
           </defs>
-          <!-- High-Contrast Frosted Glass Emblem Plate (Right Half) -->
-          <rect x="260" y="10" width="185" height="248" rx="14" fill="rgba(3, 8, 20, 0.84)" stroke="rgba(34, 211, 238, 0.35)" stroke-width="1.5"/>
-          <!-- Right Circuit Arc -->
-          <path d="M266 26 A72 72 0 0 1 334 98 A72 72 0 0 1 266 170" fill="none" stroke="url(#huGradR)" stroke-width="4"/>
+          <!-- Armored Glass Emblem Housing (Right Half) -->
+          <rect x="280" y="10" width="215" height="268" rx="16" fill="rgba(3, 9, 22, 0.88)" stroke="rgba(34, 211, 238, 0.42)" stroke-width="1.5"/>
+          <!-- Outer Right Circuit Ring -->
+          <path d="M286 28 A76 76 0 0 1 358 104 A76 76 0 0 1 286 180" fill="none" stroke="url(#huGradR)" stroke-width="4.5"/>
           <!-- Bold Geometric U -->
-          <path d="M272 58 V112 A22 22 0 0 0 316 112 V58" fill="none" stroke="url(#huGradR)" stroke-width="11" stroke-linecap="square"/>
+          <path d="M292 62 V118 A23 23 0 0 0 338 118 V62" fill="none" stroke="url(#huGradR)" stroke-width="12" stroke-linecap="square"/>
           <!-- Center Seam Wedges -->
-          <polygon points="268,32 260,44 260,26" fill="#2dd4bf"/>
-          <polygon points="268,164 260,152 260,170" fill="#2dd4bf"/>
+          <polygon points="288,34 280,46 280,28" fill="#2dd4bf"/>
+          <polygon points="288,174 280,162 280,180" fill="#2dd4bf"/>
           <!-- Circuit Node -->
-          <circle cx="334" cy="98" r="4.5" fill="#10b981"/>
-          <line x1="334" y1="98" x2="354" y2="98" stroke="#10b981" stroke-width="2.5"/>
-          <!-- Crisp Brand Typography (Right Half) -->
-          <text x="261" y="212" text-anchor="start" fill="#ffffff" font-family="Segoe UI, sans-serif" font-weight="800" font-size="33" letter-spacing="5">AN</text>
-          <text x="261" y="236" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-weight="700" font-size="11.5" letter-spacing="2">CAL SYSTEMS</text>
+          <circle cx="358" cy="104" r="5" fill="#10b981"/>
+          <line x1="358" y1="104" x2="382" y2="104" stroke="#10b981" stroke-width="2.5"/>
+          <!-- Seamless Brand Typography (Right Half: AN) -->
+          <text x="281" y="226" text-anchor="start" fill="#ffffff" font-family="Segoe UI, sans-serif" font-weight="800" font-size="36" letter-spacing="4">AN</text>
+          <text x="281" y="252" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-weight="700" font-size="12" letter-spacing="1.8">CAL SYSTEMS</text>
         </svg>
       </div>
     </div>
 
-    <!-- SIDE-MOUNTED BIOMETRIC ACCESS TERMINAL -->
+    <!-- WALL-MOUNTED BIOMETRIC ACCESS READER -->
     <div id="auth-console">
       <div class="auth-header">
         <span>HUMAN // ACCESS TERMINAL</span>
