@@ -1,0 +1,623 @@
+<!--
+==============================================================================
+Copyright (c) 2026 Hüseyin Üstündağ | HUMAN — AIOps & Critical Systems
+All Rights Reserved. Unauthorized copying, commercial deployment, or 
+modification of this file, via any medium, is strictly prohibited.
+==============================================================================
+-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUMAN | AIOps & Critical Systems — 3D Cold-Aisle NOC Portal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    :root {
+      --bg-void: #030712;
+      --cyan-neon: #22d3ee;
+      --teal-glow: #14b8a6;
+      --red-alert: #ef4444;
+      --emerald-ok: #10b981;
+      --glass-panel: rgba(6, 13, 28, 0.78);
+      --border-tech: rgba(34, 211, 238, 0.28);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: var(--bg-void);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: #f8fafc;
+    }
+
+    /* 3D CANVAS */
+    #dc-canvas {
+      position: fixed; inset: 0; width: 100vw; height: 100vh;
+      z-index: 1; display: block;
+    }
+
+    /* ================= INDUSTRIAL AIRLOCK DOOR OVERLAY ================= */
+    #airlock-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column;
+      pointer-events: auto;
+      transition: opacity 0.6s ease;
+    }
+    #airlock-overlay.unlocked { pointer-events: none; }
+
+    /* Top Steel Sliding Rail Beam */
+    .door-rail-beam {
+      position: relative; z-index: 20; height: 54px; width: 100%;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 65%, #020617 100%);
+      border-bottom: 2px solid #334155;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+    }
+    .rail-track {
+      position: absolute; bottom: 8px; left: 2%; right: 2%; height: 4px;
+      background: repeating-linear-gradient(90deg, #475569 0 18px, #1e293b 18px 24px);
+      border-radius: 2px;
+    }
+    .rail-status {
+      font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 2px;
+      color: #94a3b8; display: flex; align-items: center; gap: 10px;
+    }
+    .mag-led {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--red-alert);
+      box-shadow: 0 0 12px var(--red-alert);
+      transition: all 0.4s ease;
+    }
+    .mag-led.green {
+      background: var(--emerald-ok);
+      box-shadow: 0 0 16px var(--emerald-ok);
+    }
+
+    /* Double-Leaf Doors Container */
+    .door-leaves-wrapper {
+      position: relative; flex: 1; width: 100%; display: flex; overflow: hidden;
+    }
+
+    .door-leaf {
+      position: relative; width: 50%; height: 100%;
+      /* Semi-frosted tempered security glass revealing live 3D DC behind */
+      background: linear-gradient(135deg, rgba(8, 18, 38, 0.72) 0%, rgba(4, 10, 24, 0.64) 100%);
+      backdrop-filter: blur(11px);
+      -webkit-backdrop-filter: blur(11px);
+      border-top: 10px solid #1e293b;
+      border-bottom: 14px solid #0f172a;
+      transition: transform 1.55s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+
+    .door-leaf.left {
+      border-left: 16px solid #1e293b;
+      border-right: 4px solid #020617;
+      box-shadow: inset -12px 0 28px rgba(0, 0, 0, 0.65);
+    }
+    .door-leaf.right {
+      border-right: 16px solid #1e293b;
+      border-left: 4px solid #020617;
+      box-shadow: inset 12px 0 28px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Slide Apart Animation */
+    #airlock-overlay.open .door-leaf.left { transform: translateX(-100%); }
+    #airlock-overlay.open .door-leaf.right { transform: translateX(100%); }
+
+    /* Industrial Brushed Steel Vertical Handles */
+    .door-handle {
+      position: absolute; top: 38%; height: 24%; width: 12px;
+      background: linear-gradient(90deg, #475569, #cbd5e1, #334155);
+      border-radius: 4px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    }
+    .door-leaf.left .door-handle { right: 26px; }
+    .door-leaf.right .door-handle { left: 26px; }
+
+    /* Etched Security Grid Lines on Glass */
+    .glass-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .leaf-tag {
+      position: absolute; top: 18px; font-family: 'Consolas', monospace;
+      font-size: 11px; letter-spacing: 2px; color: rgba(148, 163, 184, 0.65);
+    }
+    .door-leaf.left .leaf-tag { left: 22px; }
+    .door-leaf.right .leaf-tag { right: 22px; }
+
+    /* Split HU Logo Positioned Across Center Seam */
+    .split-logo-half {
+      position: absolute; top: 11%; width: 460px; height: 290px;
+      pointer-events: none;
+      filter: drop-shadow(0 0 24px rgba(34, 211, 238, 0.4));
+    }
+    .door-leaf.left .split-logo-half { right: -230px; }
+    .door-leaf.right .split-logo-half { left: -230px; }
+
+    /* Central Operator Access Console */
+    #auth-console {
+      position: absolute; left: 50%; bottom: 9%; transform: translateX(-50%);
+      z-index: 30; width: 390px; max-width: 92vw;
+      background: rgba(5, 12, 26, 0.88);
+      border: 1px solid rgba(34, 211, 238, 0.45);
+      border-radius: 12px; padding: 20px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(34, 211, 238, 0.14);
+      backdrop-filter: blur(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    #airlock-overlay.open #auth-console {
+      opacity: 0; transform: translate(-50%, 24px); pointer-events: none;
+    }
+
+    .auth-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 1.5px;
+      color: var(--cyan-neon); margin-bottom: 14px;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.2); padding-bottom: 8px;
+    }
+    .auth-field { margin-bottom: 10px; }
+    .auth-field label {
+      display: block; font-size: 10px; letter-spacing: 1.5px;
+      color: #94a3b8; margin-bottom: 4px; text-transform: uppercase;
+    }
+    .auth-field input {
+      width: 100%; background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #334155; border-radius: 6px;
+      padding: 9px 12px; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 13px;
+      outline: none;
+    }
+    .auth-field input:focus { border-color: var(--cyan-neon); }
+
+    #btn-unlock {
+      width: 100%; margin-top: 8px; padding: 12px;
+      background: linear-gradient(90deg, #0284c7, #0d9488);
+      border: 1px solid #38bdf8; border-radius: 7px;
+      color: #ffffff; font-weight: 700; font-size: 12px; letter-spacing: 1.8px;
+      cursor: pointer; text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+      transition: all 0.25s ease;
+    }
+    #btn-unlock:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 28px rgba(34, 211, 238, 0.65);
+    }
+
+    /* ================= NOC TELEMETRY HUD (INSIDE COLD AISLE) ================= */
+    #noc-hud {
+      position: fixed; inset: 0; z-index: 50; pointer-events: none;
+      opacity: 0; transition: opacity 0.8s ease 0.6s;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 16px 22px;
+    }
+    #noc-hud.visible { opacity: 1; }
+
+    .hud-top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--glass-panel); border: 1px solid var(--border-tech);
+      border-radius: 10px; padding: 10px 18px; backdrop-filter: blur(12px);
+      pointer-events: auto;
+    }
+    .brand-compact { display: flex; align-items: center; gap: 12px; }
+    .brand-title { font-weight: 800; font-size: 16px; letter-spacing: 3px; color: #f8fafc; }
+    .brand-sub { font-size: 10px; letter-spacing: 1.8px; color: var(--cyan-neon); }
+
+    .hud-controls { display: flex; gap: 10px; align-items: center; }
+    .btn-hud {
+      background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #e2e8f0; padding: 7px 13px; border-radius: 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-hud:hover { border-color: var(--cyan-neon); color: #fff; }
+    .btn-hud.danger { border-color: rgba(239, 68, 68, 0.6); color: #fca5a5; }
+    .btn-hud.danger:hover { background: rgba(239, 68, 68, 0.2); }
+
+    .hud-bottom-grid {
+      display: grid; grid-template-columns: 320px 1fr 340px; gap: 16px;
+      align-items: end;
+    }
+    .telemetry-card {
+      background: var(--glass-panel); border: 1px solid var(--border-tech);
+      border-radius: 10px; padding: 14px 16px; backdrop-filter: blur(12px);
+      pointer-events: auto;
+    }
+    .card-label {
+      font-family: 'Consolas', monospace; font-size: 10px; letter-spacing: 1.8px;
+      color: var(--cyan-neon); text-transform: uppercase; margin-bottom: 10px;
+      display: flex; justify-content: space-between;
+    }
+    .metric-row {
+      display: flex; justify-content: space-between; padding: 5px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12); font-size: 12px;
+    }
+    .metric-val { font-family: 'Consolas', monospace; font-weight: 700; color: #38bdf8; }
+    .metric-val.alert { color: var(--red-alert); }
+
+    .ai-diagnosis-box {
+      font-size: 12px; line-height: 1.5; color: #cbd5e1;
+      background: rgba(2, 6, 23, 0.65); padding: 10px; border-radius: 6px;
+      border-left: 3px solid var(--emerald-ok);
+    }
+    .ai-diagnosis-box.anomaly { border-left-color: var(--red-alert); color: #fecaca; }
+
+    .copyright-foot {
+      text-align: center; font-size: 10px; letter-spacing: 1.2px;
+      color: rgba(148, 163, 184, 0.6); padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LIVE 3D DATA CENTER COLD-AISLE CANVAS -->
+  <canvas id="dc-canvas"></canvas>
+
+  <!-- INDUSTRIAL AIRLOCK SECURITY DOOR WITH SPLIT HU LOGO -->
+  <div id="airlock-overlay">
+    <div class="door-rail-beam">
+      <div class="rail-status">
+        <span class="mag-led" id="mag-led-left"></span>
+        <span id="lock-status-text">AIRLOCK MANTAP // MAG-LOCK: ENGAGED</span>
+      </div>
+      <div class="rail-status">
+        <span>ZONE: ANK-DC01-COLD-AISLE-B</span>
+        <span class="mag-led" id="mag-led-right"></span>
+      </div>
+      <div class="rail-track"></div>
+    </div>
+
+    <div class="door-leaves-wrapper">
+      <!-- LEFT DOOR LEAF (H HALF) -->
+      <div class="door-leaf left">
+        <div class="glass-grid"></div>
+        <div class="leaf-tag">GATE LEAF // L-01 [TEMPERED]</div>
+        <div class="door-handle"></div>
+        <svg class="split-logo-half" viewBox="0 0 460 290">
+          <defs>
+            <linearGradient id="huGradL" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#22d3ee"/>
+              <stop offset="100%" stop-color="#2dd4bf"/>
+            </linearGradient>
+          </defs>
+          <!-- Left Arc & H Pillar -->
+          <path d="M195 30 A95 95 0 0 0 115 110 L175 110 L175 130 L115 130 A95 95 0 0 0 195 210 L195 145 L222 145 L222 210 L222 30 L195 30 Z"
+                fill="none" stroke="url(#huGradL)" stroke-width="5"/>
+          <path d="M202 25 L228 50 L228 25 Z" fill="url(#huGradL)"/>
+          <path d="M202 215 L228 190 L228 215 Z" fill="url(#huGradL)"/>
+          <circle cx="145" cy="95" r="4" fill="#22d3ee"/>
+          <circle cx="145" cy="145" r="4" fill="#22d3ee"/>
+          <text x="228" y="255" text-anchor="end" fill="#e2e8f0" font-family="Segoe UI, sans-serif" font-weight="800" font-size="34" letter-spacing="6">HUM</text>
+          <text x="228" y="278" text-anchor="end" fill="#22d3ee" font-family="Consolas, monospace" font-size="12" letter-spacing="2.5">AIOps &amp; CRITI</text>
+        </svg>
+      </div>
+
+      <!-- RIGHT DOOR LEAF (U HALF) -->
+      <div class="door-leaf right">
+        <div class="glass-grid"></div>
+        <div class="leaf-tag">GATE LEAF // R-02 [TEMPERED]</div>
+        <div class="door-handle"></div>
+        <svg class="split-logo-half" viewBox="0 0 460 290">
+          <defs>
+            <linearGradient id="huGradR" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#22d3ee"/>
+              <stop offset="100%" stop-color="#10b981"/>
+            </linearGradient>
+          </defs>
+          <!-- Right Arc & U Pillar -->
+          <path d="M238 30 L238 165 A45 45 0 0 0 325 165 L325 90 A95 95 0 0 1 265 210 L238 210"
+                fill="none" stroke="url(#huGradR)" stroke-width="5"/>
+          <path d="M258 25 L232 50 L232 25 Z" fill="url(#huGradR)"/>
+          <path d="M258 215 L232 190 L232 215 Z" fill="url(#huGradR)"/>
+          <circle cx="305" cy="155" r="4" fill="#2dd4bf"/>
+          <text x="232" y="255" text-anchor="start" fill="#f8fafc" font-family="Segoe UI, sans-serif" font-weight="800" font-size="34" letter-spacing="6">AN</text>
+          <text x="232" y="278" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-size="12" letter-spacing="2.5">CAL SYSTEMS</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- OPERATOR AUTHENTICATION CONSOLE -->
+    <div id="auth-console">
+      <div class="auth-header">
+        <span>HUMAN // NOC ACCESS GATE</span>
+        <span>TLS 1.3 SECURE</span>
+      </div>
+      <div class="auth-field">
+        <label>Operatör Kimliği</label>
+        <input type="text" id="op-user" value="h.ustundag@human-aiops.io" />
+      </div>
+      <div class="auth-field">
+        <label>Güvenlik Anahtarı</label>
+        <input type="password" id="op-pass" value="••••••••••••" />
+      </div>
+      <button id="btn-unlock">Kimliği Doğrula &amp; Kapıyı Aç</button>
+    </div>
+  </div>
+
+  <!-- INSIDE NOC TELEMETRY HUD -->
+  <div id="noc-hud">
+    <div class="hud-top-bar">
+      <div class="brand-compact">
+        <svg width="34" height="34" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="#22d3ee" stroke-width="5"/>
+          <path d="M32 28 V72 M32 50 H48 M48 28 V72 M56 28 V58 A12 12 0 0 0 76 58 V28" fill="none" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="brand-title">HUMAN</div>
+          <div class="brand-sub">AIOps &amp; CRITICAL SYSTEMS // COLD-AISLE DIGITAL TWIN</div>
+        </div>
+      </div>
+      <div class="hud-controls">
+        <button class="btn-hud danger" id="btn-sim-anomaly">Kablo Tıkanıklığı Simüle Et (RACK-B04)</button>
+        <button class="btn-hud" id="btn-reset-normal">Sistemi Normalleştir</button>
+        <button class="btn-hud" id="btn-relock">Kapıyı Kilitle</button>
+      </div>
+    </div>
+
+    <div class="hud-bottom-grid">
+      <div class="telemetry-card">
+        <div class="card-label">
+          <span>DMTF REDFISH TELEMETRİ</span>
+          <span id="selected-rack-label">RACK-B04</span>
+        </div>
+        <div class="metric-row"><span>Soğuk Koridor Giriş (Inlet):</span><span class="metric-val" id="m-inlet">22.4 °C</span></div>
+        <div class="metric-row"><span>Sıcak Egzos Çıkış (Exhaust):</span><span class="metric-val" id="m-exhaust">31.8 °C</span></div>
+        <div class="metric-row"><span>Termal Fark (Delta-T):</span><span class="metric-val" id="m-deltat">9.4 °C</span></div>
+        <div class="metric-row"><span>Sunucu Fan Devri (PWM):</span><span class="metric-val" id="m-fan">42 %</span></div>
+        <div class="metric-row"><span>Kabinet Güç Çekişi:</span><span class="metric-val" id="m-power">5.8 kW</span></div>
+      </div>
+
+      <div class="copyright-foot">
+        © 2026 Hüseyin Üstündağ — HUMAN | AIOps &amp; Critical Systems. All Rights Reserved. | Kabinetlere tıklayarak sensör verilerini inceleyin.
+      </div>
+
+      <div class="telemetry-card">
+        <div class="card-label">
+          <span>ISOLATION FOREST AI TEŞHİS</span>
+          <span id="ai-score-badge">SCORE: +0.142</span>
+        </div>
+        <div class="ai-diagnosis-box" id="ai-diagnosis-text">
+          <strong>DURUM: NOMINAL_OPERATION</strong><br/>
+          Tüm 42U kabinetlerde hava akışı ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde seyrediyor.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= THREE.JS PHOTOREALISTIC COLD-AISLE =================
+    const canvas = document.getElementById('dc-canvas');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x020611);
+    scene.fog = new THREE.FogExp2(0x030b1c, 0.036);
+
+    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 120);
+    let targetCamZ = 14.5; // Outside airlock threshold initially
+    camera.position.set(0, 2.2, 14.5);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Lighting
+    const ambient = new THREE.AmbientLight(0x1e3a8a, 1.1);
+    scene.add(ambient);
+
+    const corridorLight1 = new THREE.PointLight(0x22d3ee, 2.2, 26);
+    corridorLight1.position.set(0, 4.4, 4);
+    scene.add(corridorLight1);
+
+    const corridorLight2 = new THREE.PointLight(0x38bdf8, 2.0, 26);
+    corridorLight2.position.set(0, 4.4, -8);
+    scene.add(corridorLight2);
+
+    // Reflective Raised Floor with Grid Tiles
+    const floorGeo = new THREE.PlaneGeometry(16, 42);
+    const floorMat = new THREE.MeshStandardMaterial({
+      color: 0x061024, metalness: 0.85, roughness: 0.18
+    });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+
+    const gridHelper = new THREE.GridHelper(40, 40, 0x22d3ee, 0x0f294a);
+    gridHelper.position.y = 0.01;
+    scene.add(gridHelper);
+
+    // Overhead Linear LED Fixtures & Cable Trays
+    for (let z = -16; z <= 10; z += 3.2) {
+      const stripGeo = new THREE.BoxGeometry(0.18, 0.08, 2.2);
+      const stripMat = new THREE.MeshBasicMaterial({ color: 0x7dd3fc });
+      const strip = new THREE.Mesh(stripGeo, stripMat);
+      strip.position.set(0, 4.7, z);
+      scene.add(strip);
+    }
+
+    // 16 High-Density 42U Server Racks (Left Row A & Right Row B)
+    const racks = [];
+    const rackGroup = new THREE.Group();
+    scene.add(rackGroup);
+
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x090f1d, metalness: 0.7, roughness: 0.3 });
+    const cyanFrameMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
+    const redFrameMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+
+    for (let i = 0; i < 8; i++) {
+      const zPos = 8 - i * 2.8;
+      ['A', 'B'].forEach((side) => {
+        const xPos = side === 'A' ? -3.1 : 3.1;
+        const rackId = `RACK-${side}0${i + 1}`;
+        const rackContainer = new THREE.Group();
+        rackContainer.position.set(xPos, 2.0, zPos);
+
+        // Cabinet Chassis
+        const box = new THREE.Mesh(new THREE.BoxGeometry(1.4, 4.0, 2.2), bodyMat);
+        box.userData = { rackId };
+        rackContainer.add(box);
+
+        // Glowing Front Edge Frame (Neon Red/Cyan Accent)
+        const edgeX = side === 'A' ? 0.72 : -0.72;
+        const frameMat = (i % 3 === 0) ? redFrameMat.clone() : cyanFrameMat.clone();
+        const vBar1 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 3.9, 0.05), frameMat);
+        vBar1.position.set(edgeX, 0, 1.02);
+        const vBar2 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 3.9, 0.05), frameMat);
+        vBar2.position.set(edgeX, 0, -1.02);
+        rackContainer.add(vBar1, vBar2);
+
+        // Server Blade LEDs inside Glass Door
+        for (let u = -1.6; u <= 1.6; u += 0.28) {
+          const ledStrip = new THREE.Mesh(
+            new THREE.BoxGeometry(0.02, 0.08, 1.6),
+            new THREE.MeshBasicMaterial({ color: u > 0.8 ? 0x38bdf8 : 0x0ea5e9 })
+          );
+          ledStrip.position.set(edgeX * 0.96, u, 0);
+          rackContainer.add(ledStrip);
+        }
+
+        rackGroup.add(rackContainer);
+        racks.push({ rackId, mesh: box, vBar1, vBar2, defaultMat: frameMat });
+      });
+    }
+
+    // Cold-Aisle Rising Airflow Particles
+    const particleCount = 260;
+    const pGeo = new THREE.BufferGeometry();
+    const pPositions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+      pPositions[i * 3] = (Math.random() - 0.5) * 4.2;
+      pPositions[i * 3 + 1] = Math.random() * 4.2;
+      pPositions[i * 3 + 2] = (Math.random() - 0.5) * 24;
+    }
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+    const pMat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.07, transparent: true, opacity: 0.65 });
+    const airflowParticles = new THREE.Points(pGeo, pMat);
+    scene.add(airflowParticles);
+
+    // ================= AIRLOCK DOOR & ANOMALY INTERACTION =================
+    const airlock = document.getElementById('airlock-overlay');
+    const nocHud = document.getElementById('noc-hud');
+    const ledLeft = document.getElementById('mag-led-left');
+    const ledRight = document.getElementById('mag-led-right');
+    const lockText = document.getElementById('lock-status-text');
+
+    document.getElementById('btn-unlock').addEventListener('click', () => {
+      ledLeft.classList.add('green');
+      ledRight.classList.add('green');
+      lockText.textContent = 'ACCESS GRANTED // AIRLOCK OPENING...';
+      setTimeout(() => {
+        airlock.classList.add('open');
+        airlock.classList.add('unlocked');
+        targetCamZ = 4.2; // Glide straight into the Cold Aisle
+        nocHud.classList.add('visible');
+      }, 350);
+    });
+
+    document.getElementById('btn-relock').addEventListener('click', () => {
+      nocHud.classList.remove('visible');
+      targetCamZ = 14.5;
+      airlock.classList.remove('unlocked');
+      airlock.classList.remove('open');
+      ledLeft.classList.remove('green');
+      ledRight.classList.remove('green');
+      lockText.textContent = 'AIRLOCK MANTAP // MAG-LOCK: ENGAGED';
+    });
+
+    // Anomaly Simulation on RACK-B04
+    const targetB04 = racks.find(r => r.rackId === 'RACK-B04');
+    document.getElementById('btn-sim-anomaly').addEventListener('click', () => {
+      if (targetB04) {
+        targetB04.vBar1.material.color.setHex(0xff1e1e);
+        targetB04.vBar2.material.color.setHex(0xff1e1e);
+      }
+      document.getElementById('selected-rack-label').textContent = 'RACK-B04 [CRITICAL]';
+      document.getElementById('m-inlet').textContent = '24.8 °C';
+      document.getElementById('m-exhaust').textContent = '43.2 °C';
+      document.getElementById('m-exhaust').classList.add('alert');
+      document.getElementById('m-deltat').textContent = '18.4 °C';
+      document.getElementById('m-deltat').classList.add('alert');
+      document.getElementById('m-fan').textContent = '86 %';
+      document.getElementById('m-fan').classList.add('alert');
+      document.getElementById('ai-score-badge').textContent = 'SCORE: -0.218';
+      const box = document.getElementById('ai-diagnosis-text');
+      box.classList.add('anomaly');
+      box.innerHTML = '<strong>ANOMALİ: REAR_EXHAUST_IMPEDANCE</strong><br/>RACK-B04 giriş sıcaklığı normal ancak egzos Delta-T (18.4°C) kritik eşiği aştı. Kabinet arkası Katman-1 kablo yoğunluğu hava tahliyesini engelliyor.';
+    });
+
+    document.getElementById('btn-reset-normal').addEventListener('click', () => {
+      if (targetB04) {
+        targetB04.vBar1.material.color.setHex(0x22d3ee);
+        targetB04.vBar2.material.color.setHex(0x22d3ee);
+      }
+      document.getElementById('selected-rack-label').textContent = 'RACK-B04';
+      document.getElementById('m-inlet').textContent = '22.4 °C';
+      document.getElementById('m-exhaust').textContent = '31.8 °C';
+      document.getElementById('m-exhaust').classList.remove('alert');
+      document.getElementById('m-deltat').textContent = '9.4 °C';
+      document.getElementById('m-deltat').classList.remove('alert');
+      document.getElementById('m-fan').textContent = '42 %';
+      document.getElementById('m-fan').classList.remove('alert');
+      document.getElementById('ai-score-badge').textContent = 'SCORE: +0.142';
+      const box = document.getElementById('ai-diagnosis-text');
+      box.classList.remove('anomaly');
+      box.innerHTML = '<strong>DURUM: NOMINAL_OPERATION</strong><br/>Tüm 42U kabinetlerde hava akışı ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde seyrediyor.';
+    });
+
+    // Clickable Racks in 3D Scene
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    window.addEventListener('click', (e) => {
+      if (!nocHud.classList.contains('visible')) return;
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(racks.map(r => r.mesh));
+      if (hits.length > 0) {
+        const id = hits[0].object.userData.rackId;
+        document.getElementById('selected-rack-label').textContent = id;
+        document.getElementById('m-inlet').textContent = (21.8 + Math.random() * 1.4).toFixed(1) + ' °C';
+        document.getElementById('m-exhaust').textContent = (30.5 + Math.random() * 2.5).toFixed(1) + ' °C';
+        document.getElementById('m-power').textContent = (5.2 + Math.random() * 1.8).toFixed(1) + ' kW';
+      }
+    });
+
+    // Mouse Parallax & Animation Loop
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 1.4;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 0.6;
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      camera.position.z += (targetCamZ - camera.position.z) * 0.035;
+      camera.position.x += (mouseX - camera.position.x) * 0.04;
+      camera.position.y += ((2.2 - mouseY) - camera.position.y) * 0.04;
+      camera.lookAt(0, 1.9, -10);
+
+      const pos = airflowParticles.geometry.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        pos[i * 3 + 1] += 0.015;
+        if (pos[i * 3 + 1] > 4.3) pos[i * 3 + 1] = 0.05;
+      }
+      airflowParticles.geometry.attributes.position.needsUpdate = true;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
