@@ -14,14 +14,14 @@ modification of this file, via any medium, is strictly prohibited.
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
-      --bg-void: #030712;
+      --bg-void: #020611;
       --cyan-neon: #22d3ee;
       --sky-glow: #38bdf8;
       --teal-glow: #14b8a6;
       --red-alert: #ef4444;
       --emerald-ok: #10b981;
-      --glass-panel: rgba(5, 11, 24, 0.86);
-      --border-tech: rgba(34, 211, 238, 0.32);
+      --glass-panel: rgba(5, 11, 24, 0.90);
+      --border-tech: rgba(34, 211, 238, 0.36);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
@@ -44,7 +44,7 @@ modification of this file, via any medium, is strictly prohibited.
       pointer-events: auto;
       opacity: 1;
       visibility: visible;
-      transition: opacity 0.65s ease 0.95s, visibility 0.65s ease 0.95s;
+      transition: opacity 0.6s ease 0.95s, visibility 0.6s ease 0.95s;
     }
     #airlock-overlay.open {
       pointer-events: none;
@@ -60,11 +60,9 @@ modification of this file, via any medium, is strictly prohibited.
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 28px;
-      transition: transform 0.6s ease;
+      transition: transform 0.55s ease;
     }
-    #airlock-overlay.open .door-rail-beam {
-      transform: translateY(-100%);
-    }
+    #airlock-overlay.open .door-rail-beam { transform: translateY(-100%); }
 
     .rail-track {
       position: absolute; bottom: 6px; left: 2%; right: 2%; height: 3px;
@@ -92,7 +90,7 @@ modification of this file, via any medium, is strictly prohibited.
 
     .door-leaf {
       position: relative; width: 50%; height: 100%;
-      background: linear-gradient(135deg, rgba(6, 14, 30, 0.80) 0%, rgba(2, 8, 20, 0.74) 100%);
+      background: linear-gradient(135deg, rgba(6, 14, 30, 0.78) 0%, rgba(2, 8, 20, 0.72) 100%);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-top: 6px solid #1e293b;
@@ -102,12 +100,12 @@ modification of this file, via any medium, is strictly prohibited.
     }
 
     .door-leaf.left {
-      border-left: 12px solid #1e293b;
+      border-left: 14px solid #1e293b;
       border-right: 1px solid rgba(34, 211, 238, 0.35);
       box-shadow: inset -12px 0 26px rgba(0, 0, 0, 0.7);
     }
     .door-leaf.right {
-      border-right: 12px solid #1e293b;
+      border-right: 14px solid #1e293b;
       border-left: 1px solid rgba(34, 211, 238, 0.35);
       box-shadow: inset 12px 0 26px rgba(0, 0, 0, 0.7);
     }
@@ -115,15 +113,15 @@ modification of this file, via any medium, is strictly prohibited.
     #airlock-overlay.open .door-leaf.left { transform: translateX(-100%); }
     #airlock-overlay.open .door-leaf.right { transform: translateX(100%); }
 
-    /* Industrial Brushed Steel Vertical Handles */
+    /* Vertical Brushed Steel Handles - Positioned Safely Clear of Center Emblem */
     .door-handle {
-      position: absolute; top: 38%; height: 24%; width: 10px;
+      position: absolute; top: 44%; height: 22%; width: 10px;
       background: linear-gradient(90deg, #475569, #e2e8f0, #334155);
       border-radius: 4px;
       box-shadow: 0 0 18px rgba(0, 0, 0, 0.9);
     }
-    .door-leaf.left .door-handle { right: 22px; }
-    .door-leaf.right .door-handle { left: 22px; }
+    .door-leaf.left .door-handle { right: 44px; }
+    .door-leaf.right .door-handle { left: 44px; }
 
     .glass-grid {
       position: absolute; inset: 0;
@@ -141,38 +139,38 @@ modification of this file, via any medium, is strictly prohibited.
     .door-leaf.left .leaf-tag { left: 22px; }
     .door-leaf.right .leaf-tag { right: 22px; }
 
-    /* PRECISION SPLIT EMBLEM (500px SVG -> 250px Left Half + 250px Right Half) */
+    /* UPPER-CENTER EMBLEM BADGE (CLEAR OF HANDLES & SIDE TERMINAL) */
     .split-logo-half {
       position: absolute;
-      top: calc(50% - 265px);
-      width: 500px;
-      height: 245px;
+      top: 12%;
+      width: 520px;
+      height: 270px;
       pointer-events: none;
-      filter: drop-shadow(0 0 22px rgba(34, 211, 238, 0.42));
+      filter: drop-shadow(0 0 26px rgba(34, 211, 238, 0.45));
     }
-    .door-leaf.left .split-logo-half { right: -250px; }
-    .door-leaf.right .split-logo-half { left: -250px; }
+    .door-leaf.left .split-logo-half { right: -260px; }
+    .door-leaf.right .split-logo-half { left: -260px; }
 
-    /* Central Operator Access Terminal */
+    /* WALL-MOUNTED SIDE ACCESS TERMINAL (RIGHT SIDE - LEAVES CENTER GLASS CLEAR) */
     #auth-console {
       position: absolute;
-      left: 50%;
-      top: calc(50% - 5px);
-      transform: translateX(-50%);
+      right: 44px;
+      bottom: 44px;
       z-index: 30;
-      width: 380px;
-      max-width: 90vw;
-      background: rgba(5, 12, 26, 0.92);
-      border: 1px solid rgba(34, 211, 238, 0.48);
+      width: 340px;
+      max-width: 88vw;
+      background: rgba(4, 10, 22, 0.94);
+      border: 1px solid rgba(34, 211, 238, 0.55);
+      border-left: 4px solid var(--cyan-neon);
       border-radius: 12px;
-      padding: 18px 22px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.92), 0 0 34px rgba(34, 211, 238, 0.18);
-      backdrop-filter: blur(16px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      padding: 18px 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95), 0 0 34px rgba(34, 211, 238, 0.20);
+      backdrop-filter: blur(18px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
     #airlock-overlay.open #auth-console {
       opacity: 0;
-      transform: translate(-50%, 16px);
+      transform: translateX(40px);
       pointer-events: none;
     }
 
@@ -180,7 +178,7 @@ modification of this file, via any medium, is strictly prohibited.
       display: flex; justify-content: space-between; align-items: center;
       font-family: 'Consolas', monospace; font-size: 11px; letter-spacing: 1.5px;
       color: var(--cyan-neon); margin-bottom: 12px;
-      border-bottom: 1px solid rgba(34, 211, 238, 0.22); padding-bottom: 8px;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.24); padding-bottom: 8px;
     }
     .auth-field { margin-bottom: 10px; }
     .auth-field label {
@@ -188,9 +186,9 @@ modification of this file, via any medium, is strictly prohibited.
       color: #94a3b8; margin-bottom: 4px; text-transform: uppercase;
     }
     .auth-field input {
-      width: 100%; background: rgba(15, 23, 42, 0.94);
+      width: 100%; background: rgba(15, 23, 42, 0.95);
       border: 1px solid #334155; border-radius: 6px;
-      padding: 9px 12px; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 13px;
+      padding: 9px 12px; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 12px;
       outline: none;
     }
     .auth-field input:focus { border-color: var(--cyan-neon); }
@@ -199,7 +197,7 @@ modification of this file, via any medium, is strictly prohibited.
       width: 100%; margin-top: 6px; padding: 12px;
       background: linear-gradient(90deg, #0284c7, #0d9488);
       border: 1px solid #38bdf8; border-radius: 7px;
-      color: #ffffff; font-weight: 700; font-size: 12px; letter-spacing: 1.8px;
+      color: #ffffff; font-weight: 700; font-size: 12px; letter-spacing: 1.6px;
       cursor: pointer; text-transform: uppercase;
       box-shadow: 0 0 20px rgba(14, 165, 233, 0.45);
       transition: all 0.25s ease;
@@ -212,7 +210,7 @@ modification of this file, via any medium, is strictly prohibited.
     /* ================= INSIDE NOC TELEMETRY HUD ================= */
     #noc-hud {
       position: fixed; inset: 0; z-index: 50; pointer-events: none;
-      opacity: 0; transition: opacity 0.75s ease 0.5s;
+      opacity: 0; transition: opacity 0.7s ease 0.45s;
       display: flex; flex-direction: column; justify-content: space-between;
       padding: 16px 22px 24px 22px;
     }
@@ -223,25 +221,25 @@ modification of this file, via any medium, is strictly prohibited.
       background: var(--glass-panel); border: 1px solid var(--border-tech);
       border-radius: 10px; padding: 10px 18px; backdrop-filter: blur(14px);
       pointer-events: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
     }
     .brand-compact { display: flex; align-items: center; gap: 12px; }
     .brand-title { font-weight: 800; font-size: 16px; letter-spacing: 3px; color: #f8fafc; }
     .brand-sub { font-size: 10px; letter-spacing: 1.6px; color: var(--cyan-neon); }
 
-    .hud-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .hud-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .btn-hud {
-      background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.45);
-      color: #e2e8f0; padding: 8px 14px; border-radius: 6px;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.8px; cursor: pointer;
+      background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #e2e8f0; padding: 8px 13px; border-radius: 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.7px; cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-hud:hover { border-color: var(--cyan-neon); color: #fff; background: rgba(14, 165, 233, 0.2); }
+    .btn-hud:hover, .btn-hud.active { border-color: var(--cyan-neon); color: #fff; background: rgba(14, 165, 233, 0.28); }
     .btn-hud.danger { border-color: rgba(239, 68, 68, 0.65); color: #fca5a5; }
     .btn-hud.danger:hover { background: rgba(239, 68, 68, 0.25); color: #fff; }
 
     .hud-bottom-grid {
-      display: grid; grid-template-columns: 320px 1fr 350px; gap: 18px;
+      display: grid; grid-template-columns: 325px 1fr 355px; gap: 18px;
       align-items: end;
     }
     @media (max-width: 1024px) {
@@ -253,14 +251,12 @@ modification of this file, via any medium, is strictly prohibited.
       background: var(--glass-panel); border: 1px solid var(--border-tech);
       border-radius: 10px; padding: 14px 16px; backdrop-filter: blur(14px);
       pointer-events: auto;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
     }
-    .telemetry-card.right-card {
-      margin-bottom: 28px;
-    }
+    .telemetry-card.right-card { margin-bottom: 28px; }
 
     .card-label {
-      font-family: 'Consolas', monospace; font-size: 10px; letter-spacing: 1.6px;
+      font-family: 'Consolas', monospace; font-size: 10px; letter-spacing: 1.5px;
       color: var(--cyan-neon); text-transform: uppercase; margin-bottom: 10px;
       display: flex; justify-content: space-between;
     }
@@ -270,17 +266,18 @@ modification of this file, via any medium, is strictly prohibited.
     }
     .metric-val { font-family: 'Consolas', monospace; font-weight: 700; color: #38bdf8; }
     .metric-val.alert { color: var(--red-alert); }
+    .metric-val.ok { color: var(--emerald-ok); }
 
     .ai-diagnosis-box {
       font-size: 12px; line-height: 1.5; color: #cbd5e1;
-      background: rgba(2, 6, 23, 0.72); padding: 10px 12px; border-radius: 6px;
+      background: rgba(2, 6, 23, 0.74); padding: 10px 12px; border-radius: 6px;
       border-left: 3px solid var(--emerald-ok);
     }
     .ai-diagnosis-box.anomaly { border-left-color: var(--red-alert); color: #fecaca; }
 
     .copyright-foot {
       text-align: center; font-size: 10px; letter-spacing: 1.1px;
-      color: rgba(148, 163, 184, 0.72); padding-bottom: 4px;
+      color: rgba(148, 163, 184, 0.78); padding-bottom: 4px;
     }
   </style>
 </head>
@@ -303,68 +300,72 @@ modification of this file, via any medium, is strictly prohibited.
     </div>
 
     <div class="door-leaves-wrapper">
-      <!-- LEFT DOOR LEAF (EXACT H HALF: x <= 250) -->
+      <!-- LEFT DOOR LEAF -->
       <div class="door-leaf left">
         <div class="glass-grid"></div>
         <div class="leaf-tag">GATE LEAF // L-01 [TEMPERED]</div>
         <div class="door-handle"></div>
-        <svg class="split-logo-half" viewBox="0 0 500 245">
+        <svg class="split-logo-half" viewBox="0 0 520 270">
           <defs>
             <linearGradient id="huGradL" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#38bdf8"/>
               <stop offset="100%" stop-color="#22d3ee"/>
             </linearGradient>
           </defs>
+          <!-- High-Contrast Frosted Glass Emblem Plate (Left Half) -->
+          <rect x="75" y="10" width="185" height="248" rx="14" fill="rgba(3, 8, 20, 0.84)" stroke="rgba(34, 211, 238, 0.35)" stroke-width="1.5"/>
           <!-- Left Circuit Arc -->
-          <path d="M244 20 A74 74 0 0 0 174 94 A74 74 0 0 0 244 168" fill="none" stroke="url(#huGradL)" stroke-width="4"/>
+          <path d="M254 26 A72 72 0 0 0 186 98 A72 72 0 0 0 254 170" fill="none" stroke="url(#huGradL)" stroke-width="4"/>
           <!-- Bold Geometric H -->
-          <path d="M196 52 V136 M196 94 H238 M238 52 V136" fill="none" stroke="url(#huGradL)" stroke-width="11" stroke-linecap="square"/>
+          <path d="M206 58 V138 M206 98 H248 M248 58 V138" fill="none" stroke="url(#huGradL)" stroke-width="11" stroke-linecap="square"/>
           <!-- Center Seam Wedges -->
-          <polygon points="242,26 250,38 250,20" fill="#22d3ee"/>
-          <polygon points="242,162 250,150 250,168" fill="#22d3ee"/>
+          <polygon points="252,32 260,44 260,26" fill="#22d3ee"/>
+          <polygon points="252,164 260,152 260,170" fill="#22d3ee"/>
           <!-- Circuit Node -->
-          <circle cx="174" cy="94" r="4.5" fill="#38bdf8"/>
-          <line x1="154" y1="94" x2="174" y2="94" stroke="#38bdf8" stroke-width="2.5"/>
-          <!-- Left Typography -->
-          <text x="249" y="206" text-anchor="end" fill="#f8fafc" font-family="Segoe UI, sans-serif" font-weight="800" font-size="31" letter-spacing="5">HUM</text>
-          <text x="249" y="228" text-anchor="end" fill="#22d3ee" font-family="Consolas, monospace" font-size="11" letter-spacing="2">AIOps &amp; CRITI</text>
+          <circle cx="186" cy="98" r="4.5" fill="#38bdf8"/>
+          <line x1="166" y1="98" x2="186" y2="98" stroke="#38bdf8" stroke-width="2.5"/>
+          <!-- Crisp Brand Typography (Left Half) -->
+          <text x="259" y="212" text-anchor="end" fill="#ffffff" font-family="Segoe UI, sans-serif" font-weight="800" font-size="33" letter-spacing="5">HUM</text>
+          <text x="259" y="236" text-anchor="end" fill="#38bdf8" font-family="Consolas, monospace" font-weight="700" font-size="11.5" letter-spacing="2">AIOps &amp; CRITI</text>
         </svg>
       </div>
 
-      <!-- RIGHT DOOR LEAF (EXACT U HALF: x >= 250) -->
+      <!-- RIGHT DOOR LEAF -->
       <div class="door-leaf right">
         <div class="glass-grid"></div>
         <div class="leaf-tag">GATE LEAF // R-02 [TEMPERED]</div>
         <div class="door-handle"></div>
-        <svg class="split-logo-half" viewBox="0 0 500 245">
+        <svg class="split-logo-half" viewBox="0 0 520 270">
           <defs>
             <linearGradient id="huGradR" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#22d3ee"/>
               <stop offset="100%" stop-color="#10b981"/>
             </linearGradient>
           </defs>
+          <!-- High-Contrast Frosted Glass Emblem Plate (Right Half) -->
+          <rect x="260" y="10" width="185" height="248" rx="14" fill="rgba(3, 8, 20, 0.84)" stroke="rgba(34, 211, 238, 0.35)" stroke-width="1.5"/>
           <!-- Right Circuit Arc -->
-          <path d="M256 20 A74 74 0 0 1 326 94 A74 74 0 0 1 256 168" fill="none" stroke="url(#huGradR)" stroke-width="4"/>
+          <path d="M266 26 A72 72 0 0 1 334 98 A72 72 0 0 1 266 170" fill="none" stroke="url(#huGradR)" stroke-width="4"/>
           <!-- Bold Geometric U -->
-          <path d="M262 52 V108 A22 22 0 0 0 306 108 V52" fill="none" stroke="url(#huGradR)" stroke-width="11" stroke-linecap="square"/>
+          <path d="M272 58 V112 A22 22 0 0 0 316 112 V58" fill="none" stroke="url(#huGradR)" stroke-width="11" stroke-linecap="square"/>
           <!-- Center Seam Wedges -->
-          <polygon points="258,26 250,38 250,20" fill="#2dd4bf"/>
-          <polygon points="258,162 250,150 250,168" fill="#2dd4bf"/>
+          <polygon points="268,32 260,44 260,26" fill="#2dd4bf"/>
+          <polygon points="268,164 260,152 260,170" fill="#2dd4bf"/>
           <!-- Circuit Node -->
-          <circle cx="326" cy="94" r="4.5" fill="#10b981"/>
-          <line x1="326" y1="94" x2="346" y2="94" stroke="#10b981" stroke-width="2.5"/>
-          <!-- Right Typography -->
-          <text x="251" y="206" text-anchor="start" fill="#f8fafc" font-family="Segoe UI, sans-serif" font-weight="800" font-size="31" letter-spacing="5">AN</text>
-          <text x="251" y="228" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-size="11" letter-spacing="2">CAL SYSTEMS</text>
+          <circle cx="334" cy="98" r="4.5" fill="#10b981"/>
+          <line x1="334" y1="98" x2="354" y2="98" stroke="#10b981" stroke-width="2.5"/>
+          <!-- Crisp Brand Typography (Right Half) -->
+          <text x="261" y="212" text-anchor="start" fill="#ffffff" font-family="Segoe UI, sans-serif" font-weight="800" font-size="33" letter-spacing="5">AN</text>
+          <text x="261" y="236" text-anchor="start" fill="#2dd4bf" font-family="Consolas, monospace" font-weight="700" font-size="11.5" letter-spacing="2">CAL SYSTEMS</text>
         </svg>
       </div>
     </div>
 
-    <!-- OPERATOR AUTHENTICATION CONSOLE -->
+    <!-- SIDE-MOUNTED BIOMETRIC ACCESS TERMINAL -->
     <div id="auth-console">
       <div class="auth-header">
-        <span>HUMAN // NOC ACCESS GATE</span>
-        <span>TLS 1.3 SECURE</span>
+        <span>HUMAN // ACCESS TERMINAL</span>
+        <span>TLS 1.3</span>
       </div>
       <div class="auth-field">
         <label>Operatör Kimliği</label>
@@ -392,8 +393,9 @@ modification of this file, via any medium, is strictly prohibited.
         </div>
       </div>
       <div class="hud-controls">
+        <button class="btn-hud active" id="btn-toggle-cables">Katman-1 Fiber &amp; Bağlantılar: AÇIK</button>
         <button class="btn-hud danger" id="btn-sim-anomaly">Kablo Tıkanıklığı Simüle Et (RACK-B04)</button>
-        <button class="btn-hud" id="btn-reset-normal">Sistemi Normalleştir</button>
+        <button class="btn-hud" id="btn-reset-normal">Normalleştir</button>
         <button class="btn-hud" id="btn-relock">Kapıyı Kilitle</button>
       </div>
     </div>
@@ -401,18 +403,18 @@ modification of this file, via any medium, is strictly prohibited.
     <div class="hud-bottom-grid">
       <div class="telemetry-card">
         <div class="card-label">
-          <span>DMTF REDFISH TELEMETRİ</span>
+          <span>DMTF REDFISH &amp; KATMAN-1</span>
           <span id="selected-rack-label">RACK-B04</span>
         </div>
         <div class="metric-row"><span>Soğuk Koridor Giriş (Inlet):</span><span class="metric-val" id="m-inlet">22.4 °C</span></div>
         <div class="metric-row"><span>Sıcak Egzos Çıkış (Exhaust):</span><span class="metric-val" id="m-exhaust">31.8 °C</span></div>
         <div class="metric-row"><span>Termal Fark (Delta-T):</span><span class="metric-val" id="m-deltat">9.4 °C</span></div>
-        <div class="metric-row"><span>Sunucu Fan Devri (PWM):</span><span class="metric-val" id="m-fan">42 %</span></div>
-        <div class="metric-row"><span>Kabinet Güç Çekişi:</span><span class="metric-val" id="m-power">5.8 kW</span></div>
+        <div class="metric-row"><span>ToR Switch / OM4 Fiber Link:</span><span class="metric-val ok" id="m-link">400GbE UP (0.4 dB)</span></div>
+        <div class="metric-row"><span>Kabinet Güç / Fan PWM:</span><span class="metric-val" id="m-power">5.8 kW / 42%</span></div>
       </div>
 
       <div class="copyright-foot">
-        © 2026 Hüseyin Üstündağ — HUMAN | AIOps &amp; Critical Systems. All Rights Reserved. | Kabinetlere tıklayarak sensör verilerini inceleyin.
+        © 2026 Hüseyin Üstündağ — HUMAN | AIOps &amp; Critical Systems. All Rights Reserved. | Kabinetlere tıklayarak bağlantıları &amp; sensörleri inceleyin.
       </div>
 
       <div class="telemetry-card right-card">
@@ -422,25 +424,22 @@ modification of this file, via any medium, is strictly prohibited.
         </div>
         <div class="ai-diagnosis-box" id="ai-diagnosis-text">
           <strong>DURUM: NOMINAL_OPERATION</strong><br/>
-          Tüm 42U kabinetlerde hava akışı ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde seyrediyor.
+          Tüm 42U kabinetlerde hava akışı, OM4 fiber optik bağlantılar ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde.
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ================= PROCEDURAL SERVER RACK FACEPLATE TEXTURE =================
     function createServerRackTexture() {
       const c = document.createElement('canvas');
       c.width = 256;
       c.height = 512;
       const ctx = c.getContext('2d');
 
-      // Dark brushed steel cabinet background
-      ctx.fillStyle = '#070d19';
+      ctx.fillStyle = '#060c18';
       ctx.fillRect(0, 0, 256, 512);
 
-      // Perforated mesh dots
       ctx.fillStyle = '#0f172a';
       for (let y = 8; y < 504; y += 6) {
         for (let x = 14; x < 242; x += 6) {
@@ -448,28 +447,39 @@ modification of this file, via any medium, is strictly prohibited.
         }
       }
 
-      // 24 Server Chassis Blades (2U units)
-      for (let u = 0; u < 24; u++) {
-        const y = 12 + u * 20;
-        ctx.fillStyle = '#0d1526';
-        ctx.fillRect(16, y, 224, 15);
+      // Top-of-Rack (ToR) 400GbE Fiber Switch
+      ctx.fillStyle = '#0f294a';
+      ctx.fillRect(14, 12, 228, 34);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(14, 12, 228, 34);
+      for (let p = 0; p < 16; p++) {
+        ctx.fillStyle = (p % 2 === 0) ? '#22d3ee' : '#10b981';
+        ctx.fillRect(22 + p * 13, 20, 9, 8);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(22 + p * 13, 32, 9, 6);
+      }
+
+      // 21 High-Density Compute & Storage Blades
+      for (let u = 0; u < 21; u++) {
+        const y = 56 + u * 21;
+        ctx.fillStyle = '#0c1424';
+        ctx.fillRect(16, y, 224, 16);
         ctx.strokeStyle = '#1e293b';
         ctx.lineWidth = 1;
-        ctx.strokeRect(16, y, 224, 15);
+        ctx.strokeRect(16, y, 224, 16);
 
-        // Drive Bays
         ctx.fillStyle = '#1e293b';
         for (let b = 0; b < 6; b++) {
-          ctx.fillRect(24 + b * 24, y + 3, 20, 9);
+          ctx.fillRect(24 + b * 24, y + 3, 20, 10);
         }
 
-        // Status LEDs (Green Power + Blinking Cyan Activity)
         ctx.fillStyle = '#10b981';
-        ctx.fillRect(184, y + 5, 5, 5);
+        ctx.fillRect(184, y + 5, 5, 6);
         ctx.fillStyle = (u % 3 === 0) ? '#38bdf8' : '#22d3ee';
-        ctx.fillRect(194, y + 5, 18, 5);
+        ctx.fillRect(194, y + 5, 18, 6);
         ctx.fillStyle = (u % 7 === 0) ? '#f59e0b' : '#0284c7';
-        ctx.fillRect(218, y + 5, 12, 5);
+        ctx.fillRect(218, y + 5, 12, 6);
       }
 
       const tex = new THREE.CanvasTexture(c);
@@ -477,11 +487,10 @@ modification of this file, via any medium, is strictly prohibited.
       return tex;
     }
 
-    // ================= THREE.JS PHOTOREALISTIC COLD-AISLE =================
     const canvas = document.getElementById('dc-canvas');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x020611);
-    scene.fog = new THREE.FogExp2(0x030a1a, 0.032);
+    scene.fog = new THREE.FogExp2(0x030a1a, 0.03);
 
     const camera = new THREE.PerspectiveCamera(56, window.innerWidth / window.innerHeight, 0.1, 120);
     let targetCamZ = 14.2;
@@ -491,11 +500,10 @@ modification of this file, via any medium, is strictly prohibited.
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Lighting
-    const ambient = new THREE.AmbientLight(0x2563eb, 1.15);
+    const ambient = new THREE.AmbientLight(0x2563eb, 1.2);
     scene.add(ambient);
 
-    const corridorLight1 = new THREE.PointLight(0x38bdf8, 2.4, 28);
+    const corridorLight1 = new THREE.PointLight(0x38bdf8, 2.5, 28);
     corridorLight1.position.set(0, 4.3, 5);
     scene.add(corridorLight1);
 
@@ -503,12 +511,10 @@ modification of this file, via any medium, is strictly prohibited.
     corridorLight2.position.set(0, 4.3, -7);
     scene.add(corridorLight2);
 
-    // Reflective Raised Floor
-    const floorGeo = new THREE.PlaneGeometry(18, 46);
-    const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x050e21, metalness: 0.88, roughness: 0.16
-    });
-    const floor = new THREE.Mesh(floorGeo, floorMat);
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(18, 46),
+      new THREE.MeshStandardMaterial({ color: 0x050e21, metalness: 0.88, roughness: 0.16 })
+    );
     floor.rotation.x = -Math.PI / 2;
     scene.add(floor);
 
@@ -516,22 +522,65 @@ modification of this file, via any medium, is strictly prohibited.
     gridHelper.position.y = 0.01;
     scene.add(gridHelper);
 
-    // Overhead Cold-Aisle Containment Ceiling & Linear LEDs
-    const ceilingMat = new THREE.MeshStandardMaterial({ color: 0x071022, metalness: 0.6, roughness: 0.4 });
-    const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 34), ceilingMat);
+    const ceiling = new THREE.Mesh(
+      new THREE.PlaneGeometry(6.6, 34),
+      new THREE.MeshStandardMaterial({ color: 0x071022, metalness: 0.6, roughness: 0.4 })
+    );
     ceiling.rotation.x = Math.PI / 2;
-    ceiling.position.set(0, 4.45, -3);
+    ceiling.position.set(0, 4.55, -3);
     scene.add(ceiling);
 
     for (let z = -16; z <= 10; z += 3.0) {
-      const stripGeo = new THREE.BoxGeometry(0.16, 0.06, 2.1);
-      const stripMat = new THREE.MeshBasicMaterial({ color: 0xbae6fd });
-      const strip = new THREE.Mesh(stripGeo, stripMat);
-      strip.position.set(0, 4.4, z);
+      const strip = new THREE.Mesh(
+        new THREE.BoxGeometry(0.16, 0.06, 2.1),
+        new THREE.MeshBasicMaterial({ color: 0xbae6fd })
+      );
+      strip.position.set(0, 4.5, z);
       scene.add(strip);
     }
 
-    // 16 High-Density 42U Server Racks with Server Faceplate Textures
+    // LAYER-1 OVERHEAD CABLE TRAYS & FIBER TRUNKS
+    const cablingGroup = new THREE.Group();
+    scene.add(cablingGroup);
+
+    const traySteelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.25 });
+    const fiberOm4Mat = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
+    const powerTrunkMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+
+    [-2.5, 2.5].forEach((xTray) => {
+      const railL = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.12, 26), traySteelMat);
+      railL.position.set(xTray - 0.35, 4.22, -2);
+      const railR = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.12, 26), traySteelMat);
+      railR.position.set(xTray + 0.35, 4.22, -2);
+      cablingGroup.add(railL, railR);
+
+      for (let z = -14.5; z <= 10.5; z += 0.8) {
+        const rung = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.03, 0.04), traySteelMat);
+        rung.position.set(xTray, 4.17, z);
+        cablingGroup.add(rung);
+      }
+
+      const fiberBundle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 26, 8), fiberOm4Mat);
+      fiberBundle.rotation.x = Math.PI / 2;
+      fiberBundle.position.set(xTray - 0.12, 4.23, -2);
+
+      const powerBus = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 26, 8), powerTrunkMat);
+      powerBus.rotation.x = Math.PI / 2;
+      powerBus.position.set(xTray + 0.14, 4.23, -2);
+
+      cablingGroup.add(fiberBundle, powerBus);
+    });
+
+    for (let z = 8.2; z >= -11.5; z -= 5.5) {
+      const bridge = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.08, 0.45), traySteelMat);
+      bridge.position.set(0, 4.32, z);
+      const bridgeFiber = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 5.1, 8), fiberOm4Mat);
+      bridgeFiber.rotation.z = Math.PI / 2;
+      bridgeFiber.position.set(0, 4.36, z);
+      cablingGroup.add(bridge, bridgeFiber);
+    }
+
+    // 16 HIGH-DENSITY 42U RACKS
     const rackFaceTex = createServerRackTexture();
     const racks = [];
     const rackGroup = new THREE.Group();
@@ -539,7 +588,7 @@ modification of this file, via any medium, is strictly prohibited.
 
     const sideMat = new THREE.MeshStandardMaterial({ color: 0x080e1c, metalness: 0.75, roughness: 0.28 });
     const frontFaceMat = new THREE.MeshStandardMaterial({
-      map: rackFaceTex, metalness: 0.45, roughness: 0.35, emissive: 0x061830, emissiveIntensity: 0.45
+      map: rackFaceTex, metalness: 0.45, roughness: 0.35, emissive: 0x061830, emissiveIntensity: 0.5
     });
 
     for (let i = 0; i < 8; i++) {
@@ -550,12 +599,10 @@ modification of this file, via any medium, is strictly prohibited.
         const rackContainer = new THREE.Group();
         rackContainer.position.set(xPos, 2.05, zPos);
 
-        // Cabinet Body
         const box = new THREE.Mesh(new THREE.BoxGeometry(1.45, 4.05, 2.2), sideMat);
         box.userData = { rackId };
         rackContainer.add(box);
 
-        // Detailed Server Front Panel facing the Cold Aisle
         const facePlane = new THREE.Mesh(new THREE.PlaneGeometry(2.08, 3.92), frontFaceMat);
         if (side === 'A') {
           facePlane.rotation.y = Math.PI / 2;
@@ -567,7 +614,11 @@ modification of this file, via any medium, is strictly prohibited.
         facePlane.userData = { rackId };
         rackContainer.add(facePlane);
 
-        // Neon Vertical Edge Rails (Red Thermal Accent + Cyan Status)
+        const dropX = side === 'A' ? 0.52 : -0.52;
+        const fiberDrop = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.032, 0.35, 8), fiberOm4Mat);
+        fiberDrop.position.set(xPos + dropX, 4.15, zPos + 0.45);
+        cablingGroup.add(fiberDrop);
+
         const edgeX = side === 'A' ? 0.745 : -0.745;
         const isThermalHighlight = (i === 1 || i === 4 || i === 6);
         const frameMat = new THREE.MeshBasicMaterial({
@@ -585,8 +636,20 @@ modification of this file, via any medium, is strictly prohibited.
       });
     }
 
-    // Cold-Aisle Rising Airflow Particles
-    const particleCount = 240;
+    const packetCount = 48;
+    const pktGeo = new THREE.BufferGeometry();
+    const pktPos = new Float32Array(packetCount * 3);
+    for (let i = 0; i < packetCount; i++) {
+      pktPos[i * 3] = (i % 2 === 0) ? -2.62 : 2.38;
+      pktPos[i * 3 + 1] = 4.26;
+      pktPos[i * 3 + 2] = -14 + Math.random() * 24;
+    }
+    pktGeo.setAttribute('position', new THREE.BufferAttribute(pktPos, 3));
+    const pktMat = new THREE.PointsMaterial({ color: 0x7dd3fc, size: 0.14 });
+    const opticalPackets = new THREE.Points(pktGeo, pktMat);
+    cablingGroup.add(opticalPackets);
+
+    const particleCount = 220;
     const pGeo = new THREE.BufferGeometry();
     const pPositions = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
@@ -595,11 +658,10 @@ modification of this file, via any medium, is strictly prohibited.
       pPositions[i * 3 + 2] = (Math.random() - 0.5) * 24;
     }
     pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-    const pMat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.065, transparent: true, opacity: 0.6 });
+    const pMat = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.06, transparent: true, opacity: 0.55 });
     const airflowParticles = new THREE.Points(pGeo, pMat);
     scene.add(airflowParticles);
 
-    // ================= AIRLOCK DOOR & ANOMALY INTERACTION =================
     const airlock = document.getElementById('airlock-overlay');
     const nocHud = document.getElementById('noc-hud');
     const ledLeft = document.getElementById('mag-led-left');
@@ -626,7 +688,15 @@ modification of this file, via any medium, is strictly prohibited.
       lockText.textContent = 'AIRLOCK MANTRAP // MAG-LOCK: ENGAGED';
     });
 
-    // Anomaly Simulation on RACK-B04
+    const btnCables = document.getElementById('btn-toggle-cables');
+    let cablesVisible = true;
+    btnCables.addEventListener('click', () => {
+      cablesVisible = !cablesVisible;
+      cablingGroup.visible = cablesVisible;
+      btnCables.textContent = cablesVisible ? 'Katman-1 Fiber & Bağlantılar: AÇIK' : 'Katman-1 Fiber & Bağlantılar: KAPALI';
+      btnCables.classList.toggle('active', cablesVisible);
+    });
+
     const targetB04 = racks.find(r => r.rackId === 'RACK-B04');
     document.getElementById('btn-sim-anomaly').addEventListener('click', () => {
       if (targetB04) {
@@ -639,8 +709,8 @@ modification of this file, via any medium, is strictly prohibited.
       document.getElementById('m-exhaust').classList.add('alert');
       document.getElementById('m-deltat').textContent = '18.4 °C';
       document.getElementById('m-deltat').classList.add('alert');
-      document.getElementById('m-fan').textContent = '86 %';
-      document.getElementById('m-fan').classList.add('alert');
+      document.getElementById('m-power').textContent = '6.4 kW / 86%';
+      document.getElementById('m-power').classList.add('alert');
       document.getElementById('ai-score-badge').textContent = 'SCORE: -0.218';
       const box = document.getElementById('ai-diagnosis-text');
       box.classList.add('anomaly');
@@ -658,15 +728,14 @@ modification of this file, via any medium, is strictly prohibited.
       document.getElementById('m-exhaust').classList.remove('alert');
       document.getElementById('m-deltat').textContent = '9.4 °C';
       document.getElementById('m-deltat').classList.remove('alert');
-      document.getElementById('m-fan').textContent = '42 %';
-      document.getElementById('m-fan').classList.remove('alert');
+      document.getElementById('m-power').textContent = '5.8 kW / 42%';
+      document.getElementById('m-power').classList.remove('alert');
       document.getElementById('ai-score-badge').textContent = 'SCORE: +0.142';
       const box = document.getElementById('ai-diagnosis-text');
       box.classList.remove('anomaly');
-      box.innerHTML = '<strong>DURUM: NOMINAL_OPERATION</strong><br/>Tüm 42U kabinetlerde hava akışı ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde seyrediyor.';
+      box.innerHTML = '<strong>DURUM: NOMINAL_OPERATION</strong><br/>Tüm 42U kabinetlerde hava akışı, OM4 fiber optik bağlantılar ve Delta-T değerleri ASHRAE TC 9.9 Class A1 standartları dahilinde.';
     });
 
-    // Clickable Racks in 3D Scene
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     window.addEventListener('click', (e) => {
@@ -681,11 +750,11 @@ modification of this file, via any medium, is strictly prohibited.
         document.getElementById('selected-rack-label').textContent = id;
         document.getElementById('m-inlet').textContent = (21.8 + Math.random() * 1.4).toFixed(1) + ' °C';
         document.getElementById('m-exhaust').textContent = (30.5 + Math.random() * 2.5).toFixed(1) + ' °C';
-        document.getElementById('m-power').textContent = (5.2 + Math.random() * 1.8).toFixed(1) + ' kW';
+        document.getElementById('m-link').textContent = '400GbE UP (-0.' + Math.floor(2 + Math.random() * 5) + ' dB)';
+        document.getElementById('m-power').textContent = (5.2 + Math.random() * 1.6).toFixed(1) + ' kW / 44%';
       }
     });
 
-    // Mouse Parallax & Animation Loop
     let mouseX = 0, mouseY = 0;
     window.addEventListener('mousemove', (e) => {
       mouseX = (e.clientX / window.innerWidth - 0.5) * 1.2;
@@ -703,7 +772,7 @@ modification of this file, via any medium, is strictly prohibited.
       camera.position.z += (targetCamZ - camera.position.z) * 0.038;
       camera.position.x += (mouseX - camera.position.x) * 0.04;
       camera.position.y += ((2.15 - mouseY) - camera.position.y) * 0.04;
-      camera.lookAt(0, 1.95, -10);
+      camera.lookAt(0, 2.05, -10);
 
       const pos = airflowParticles.geometry.attributes.position.array;
       for (let i = 0; i < particleCount; i++) {
@@ -711,6 +780,14 @@ modification of this file, via any medium, is strictly prohibited.
         if (pos[i * 3 + 1] > 4.2) pos[i * 3 + 1] = 0.05;
       }
       airflowParticles.geometry.attributes.position.needsUpdate = true;
+
+      const pArr = opticalPackets.geometry.attributes.position.array;
+      for (let i = 0; i < packetCount; i++) {
+        pArr[i * 3 + 2] -= (i % 2 === 0) ? 0.09 : -0.09;
+        if (pArr[i * 3 + 2] < -14.5) pArr[i * 3 + 2] = 10.5;
+        if (pArr[i * 3 + 2] > 10.5) pArr[i * 3 + 2] = -14.5;
+      }
+      opticalPackets.geometry.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     }
